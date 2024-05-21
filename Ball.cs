@@ -69,7 +69,7 @@ namespace CasseBrique
                 position.Y = _screenSize.Y - size.Y;
                 velocity.Y = -velocity.Y;
             }
-            if (position.Y <= 0)
+            if (position.Y <= 0) // rebond à gauche
             {
                 position.Y = 0;
                 velocity.Y = -velocity.Y;

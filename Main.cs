@@ -14,8 +14,8 @@ namespace CasseBrique
         private Ball MyBall;
         public Point _screenSize;
         private Paddle MyPaddle;
-        private float shootingspeed = 300f;
-        private float paddleMovespeed = 400f;
+        private readonly float shootingspeed = 300f;
+        private readonly float paddleMovespeed = 400f;
 
 
 
@@ -66,7 +66,7 @@ namespace CasseBrique
             
             MyBall.Update(dt);
             MyBall.CheckBounds(_screenSize); // comment deplacer ça? Vu que j'ai une injonction de dépendance? // mieux utiliser propriétés et get? 
-            MyBall.Rebound(MyPaddle.PaddlePosition, MyPaddle.PaddleSize);
+            MyBall.Rebound(MyPaddle.Position, MyPaddle.Size);
 
             base.Update(gameTime);
         }

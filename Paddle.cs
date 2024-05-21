@@ -8,17 +8,16 @@ namespace CasseBrique
     {
         private Texture2D texture;
         protected Vector2 position;
-        private Vector2 velocity;
         private Color color = Color.Red;
         protected Vector2 size;
 
-        public Vector2 PaddlePosition
+        public Vector2 Position
         {
             get { return position; }
-            private set { position = value; }
+            private set { position = value; } //accesseur
         }
 
-        public Vector2 PaddleSize
+        public Vector2 Size
         {
             get { return size; }
             private set { size = value; }
@@ -28,18 +27,12 @@ namespace CasseBrique
         {
             this.texture = texture;
             this.position = position;
-            this.velocity = Vector2.Zero;
             this.size = new Vector2(100, 24);
         }
 
         public void Move(Vector2 direction, float speed, float dt)
         {
             position += speed * direction*dt;
-        }
-
-        public void Update(float dt)
-        {
-        
         }
 
         public void Draw(SpriteBatch sprb)
