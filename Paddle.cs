@@ -7,10 +7,22 @@ namespace CasseBrique
     internal class Paddle
     {
         private Texture2D texture;
-        public Vector2 position;
+        protected Vector2 position;
         private Vector2 velocity;
         private Color color = Color.Red;
-        public Vector2 size;
+        protected Vector2 size;
+
+        public Vector2 PaddlePosition
+        {
+            get { return position; }
+            private set { position = value; }
+        }
+
+        public Vector2 PaddleSize
+        {
+            get { return size; }
+            private set { size = value; }
+        }
 
         public Paddle(Texture2D texture, Vector2 position)
         {

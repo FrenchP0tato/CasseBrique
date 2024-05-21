@@ -14,12 +14,9 @@ namespace CasseBrique
         private Ball MyBall;
         public Point _screenSize;
         private Paddle MyPaddle;
-        public Vector2 _MyPaddlePos;
-        public Vector2 _MyPaddleSize;
         private float shootingspeed = 300f;
         private float paddleMovespeed = 400f;
 
-        
 
 
         public Main()
@@ -45,7 +42,6 @@ namespace CasseBrique
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             MyBall = new Ball(Content.Load<Texture2D>("Ball"), Vector2.One);
             MyPaddle = new Paddle(Content.Load<Texture2D>("Paddle"), new Vector2(10,_screenSize.Y-30));
-            _MyPaddleSize = MyPaddle.size;
 
         }
 
@@ -65,14 +61,12 @@ namespace CasseBrique
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Q))
                 MyPaddle.Move(new Vector2(-1, 0), paddleMovespeed,dt);
 
-            
+
             MyPaddle.CheckBounds(_screenSize);
-            _MyPaddlePos = MyPaddle.position;
-            Console.WriteLine(_MyPaddlePos);
             
             MyBall.Update(dt);
-            MyBall.CheckBounds(_screenSize);
-            MyBall.Rebound(_MyPaddlePos, _MyPaddleSize); //marche PAS!!!!
+            MyBall.CheckBounds(_screenSize); // comment deplacer ça? Vu que j'ai une injonction de dépendance? // mieux utiliser propriétés et get? 
+            MyBall.Rebound(MyPaddle.PaddlePosition, MyPaddle.PaddleSize);
 
             base.Update(gameTime);
         }
