@@ -51,6 +51,8 @@ namespace CasseBrique
 
         protected override void Update(GameTime gameTime)
         {
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds; //"casté" ma variable: forcé un type
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -58,13 +60,12 @@ namespace CasseBrique
                 MyBall.Shoot(new Vector2(2,1), shootingspeed);
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.D))
-                MyPaddle.Move(new Vector2(1, 0), paddleMovespeed);
+                MyPaddle.Move(new Vector2(1, 0), paddleMovespeed,dt);
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Q))
-                MyPaddle.Move(new Vector2(-1, 0), paddleMovespeed);
+                MyPaddle.Move(new Vector2(-1, 0), paddleMovespeed,dt);
 
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds; //"casté" ma variable: forcé un type
-            MyPaddle.Update(dt);
+            
             MyPaddle.CheckBounds(_screenSize);
             _MyPaddlePos = MyPaddle.position;
             Console.WriteLine(_MyPaddlePos);

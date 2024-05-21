@@ -20,14 +20,14 @@ namespace CasseBrique
             this.size = new Vector2(100, 24);
         }
 
-        public void Move(Vector2 direction, float speed)
+        public void Move(Vector2 direction, float speed, float dt)
         {
-            velocity = speed * direction;
+            position += speed * direction*dt;
         }
 
         public void Update(float dt)
         {
-            position += velocity * dt;
+        
         }
 
         public void Draw(SpriteBatch sprb)
