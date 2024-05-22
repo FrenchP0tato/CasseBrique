@@ -1,5 +1,7 @@
 ﻿
+using CasseBrique.Services;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -10,6 +12,7 @@ namespace CasseBrique
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private AssetsService _assetsServices;
 
         private Ball MyBall;
         public Point _screenSize;
@@ -28,6 +31,9 @@ namespace CasseBrique
 
         protected override void Initialize()
         {
+            ServicesLocator.Register<ContentManager>(Content); //enregistrement des services
+            _assetsServices= new AssetsService();
+
             _screenSize = new Point(1240,720);
             _graphics.PreferredBackBufferWidth = _screenSize.X;
             _graphics.PreferredBackBufferHeight = _screenSize.Y;
@@ -40,8 +46,11 @@ namespace CasseBrique
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            MyBall = new Ball(Content.Load<Texture2D>("Ball"), Vector2.One);
-            MyPaddle = new Paddle(Content.Load<Texture2D>("Paddle"), new Vector2(10,_screenSize.Y-30));
+            _assetsServices.Load<Texture2D>("BallBlue");
+            _assetsServices.Load<Texture2D>("Paddle");
+
+            MyBall = new Ball(Vector2.One);
+            MyPaddle = new Paddle(new Vector2(10,_screenSize.Y-30));
 
         }
 

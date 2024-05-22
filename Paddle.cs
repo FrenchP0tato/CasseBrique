@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Reflection;
+using CasseBrique.Services;
 
 namespace CasseBrique
 {
@@ -16,16 +17,16 @@ namespace CasseBrique
             get { return position; }
             private set { position = value; } //accesseur
         }
-
+        
         public Vector2 Size
         {
             get { return size; }
             private set { size = value; }
         }
 
-        public Paddle(Texture2D texture, Vector2 position)
+        public Paddle(Vector2 position)
         {
-            this.texture = texture;
+            this.texture = ServicesLocator.Get<AssetsService>().Get<Texture2D>("Paddle");
             this.position = position;
             this.size = new Vector2(100, 24);
         }
