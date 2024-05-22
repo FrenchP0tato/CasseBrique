@@ -13,9 +13,9 @@ namespace CasseBrique
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private AssetsService _assetsServices;
+        private ScreenService _screenService;
 
         private Ball MyBall;
-        public Point _screenSize;
         private Paddle MyPaddle;
         private readonly float shootingspeed = 300f;
         private readonly float paddleMovespeed = 400f;
@@ -30,15 +30,11 @@ namespace CasseBrique
         }
 
         protected override void Initialize()
-        {
-            ServicesLocator.Register<ContentManager>(Content); //enregistrement des services
-            _assetsServices= new AssetsService();
-
-            _screenSize = new Point(1240,720);
-            _graphics.PreferredBackBufferWidth = _screenSize.X;
-            _graphics.PreferredBackBufferHeight = _screenSize.Y;
-            _graphics.ApplyChanges();
-            
+        {    //enregistrement des services
+            ServicesLocator.Register<ContentManager>(Content); 
+            ServicesLocator.Register<GraphicsDeviceManager>(_graphics);
+            _assetsServices = new AssetsService();
+            _screenService = new ScreenService(1240,720);            
   
             base.Initialize();
         }
@@ -46,11 +42,12 @@ namespace CasseBrique
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _assetsServices.Load<Texture2D>("BallBlue");
-            _assetsServices.Load<Texture2D>("Paddle");
 
-            MyBall = new Ball(Vector2.One);
-            MyPaddle = new Paddle(new Vector2(10,_screenSize.Y-30));
+            _assetsServices.Load<Texture2D>("BallBlue");
+            MyBall = new Ball(_screenService.center) ;
+
+            _assetsServices.Load<Texture2D>("Paddle");
+            MyPaddle = new Paddle(new Vector2(_screenService.center.X,_screenService.bottom-30));
 
         }
 
@@ -70,11 +67,8 @@ namespace CasseBrique
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Q))
                 MyPaddle.Move(new Vector2(-1, 0), paddleMovespeed,dt);
 
-
-            MyPaddle.CheckBounds(_screenSize);
             
             MyBall.Update(dt);
-            MyBall.CheckBounds(_screenSize); // comment deplacer ça? Vu que j'ai une injonction de dépendance? // mieux utiliser propriétés et get? 
             MyBall.Rebound(MyPaddle.Position, MyPaddle.Size);
 
             base.Update(gameTime);

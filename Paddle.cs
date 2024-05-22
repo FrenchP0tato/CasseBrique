@@ -27,12 +27,13 @@ namespace CasseBrique
         public Paddle(Vector2 position)
         {
             this.texture = ServicesLocator.Get<AssetsService>().Get<Texture2D>("Paddle");
-            this.position = position;
             this.size = new Vector2(100, 24);
+            this.position = position-size*0.5f;
         }
 
         public void Move(Vector2 direction, float speed, float dt)
         {
+            CheckBounds(ServicesLocator.Get<ScreenService>().botRight);
             position += speed * direction*dt;
         }
 
@@ -41,7 +42,7 @@ namespace CasseBrique
             sprb.Draw(texture, position, color);
         }
 
-        public void CheckBounds(Point _screenSize)
+        public void CheckBounds(Vector2 _screenSize)
         {
             if (position.X >= _screenSize.X - size.X) 
             {

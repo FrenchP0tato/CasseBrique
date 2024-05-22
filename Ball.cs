@@ -16,9 +16,9 @@ namespace CasseBrique
         public Ball(Vector2 position)
         {
             this.texture = ServicesLocator.Get<AssetsService>().Get<Texture2D>("BallBlue");
-            this.position = position;
             this.velocity = Vector2.Zero;
             this.size = new Vector2(22, 22);
+            this.position = position-size*0.5f;
         }
 
         public void Shoot(Vector2 direction, float speed)
@@ -30,6 +30,7 @@ namespace CasseBrique
         public void Update(float dt)
         {
             position += velocity * dt;
+            CheckBounds(ServicesLocator.Get<ScreenService>().botRight);
         }
 
         public void Draw(SpriteBatch sprb)
@@ -53,7 +54,7 @@ namespace CasseBrique
         }
 
 
-        public void CheckBounds(Point _screenSize)
+        public void CheckBounds(Vector2 _screenSize)
         {
             if (position.X >= _screenSize.X - size.X) //rebond à droite
             {
