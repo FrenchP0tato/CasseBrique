@@ -70,9 +70,8 @@ namespace CasseBrique
             {
                 Console.WriteLine("image cliquée");
                 return true;
-                
             }
-            return false;
+            else return false;
         }
 
     }

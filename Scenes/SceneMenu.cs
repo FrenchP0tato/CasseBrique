@@ -9,8 +9,9 @@ namespace CasseBrique
     public class SceneMenu : Scene
     {
         MouseState oldMouseState;
-        SpriteFont font;
-        Button GameButton;
+        private SpriteFont font;
+        private Button GameButton;
+        private bool LeftClick;
 
         public override void Load()
         {
@@ -23,18 +24,27 @@ namespace CasseBrique
 
         public override void Update(float dt)
         {
+            LeftClick = false;
             MouseState NewMouseState = Mouse.GetState();
             if (ServicesLocator.Get<UtilsService>().CheckMouseClicks(oldMouseState, NewMouseState) == true)
             {
                 //Console.WriteLine("Bouton Souris dans mon menu!");
+                 LeftClick=true;
+                    
+            }
+            oldMouseState = NewMouseState;
+
+            if (LeftClick == true)
+            {
                 if (ServicesLocator.Get<UtilsService>().CheckObjectClick(NewMouseState, GameButton.Position, GameButton.Size) == true)
                 {
                     Console.WriteLine("Button Cliqué");
                 }
-                else { Console.WriteLine("clicking nowhere"); }
-                    
+                else 
+                { Console.WriteLine("clicking nowhere"); }
+                LeftClick = false;
             }
-            oldMouseState = NewMouseState;
+
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.V))
                 ServicesLocator.Get<IScenesManager>().LoadScene("Village");
