@@ -14,7 +14,7 @@ namespace CasseBrique
         }
 
 
-        public bool CheckCollision(Vector2 ObjectPos, float ObjectRadius, Vector2 TargetPos, float TargetRadius)
+        public bool CheckRoundCollision(Vector2 ObjectPos, float ObjectRadius, Vector2 TargetPos, float TargetRadius)
         {
             float distance = Vector2.Distance(ObjectPos, TargetPos);
             return distance < (ObjectRadius + TargetRadius);
@@ -57,6 +57,20 @@ namespace CasseBrique
             if (NewMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released)
             {
             return true;
+            }
+            return false;
+        }
+
+        public bool CheckObjectClick(MouseState NewMouseState, Vector2 objectPos, Vector2 objectSize)
+        {
+            if (NewMouseState.X>=objectPos.X &&
+                NewMouseState.Y>=objectPos.Y &&
+                NewMouseState.X<=objectPos.X+objectSize.X &&
+                NewMouseState.X<=objectPos.Y+objectSize.Y)
+            {
+                Console.WriteLine("image cliquée");
+                return true;
+                
             }
             return false;
         }

@@ -29,11 +29,12 @@ namespace CasseBrique
             private set { position = value; } //accesseur
         }
 
-        public Brique(Vector2 position, Color color) // a recevoir de la part de la Tilemap et du level maker
+        public Brique(Vector2 pos, Color color) // a recevoir de la part de la Tilemap et du level maker
         {
             this.texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrick"); // a recevoir du constructeur des héritiers
-            this.size = new Vector2(64, 32);
-            this.position = position - size * 0.5f; 
+            this.size.X=texture.Width;
+            this.size.Y=texture.Height;
+            this.position = pos - size * 0.5f; 
             this.color= color;
             this.life = 2;
             

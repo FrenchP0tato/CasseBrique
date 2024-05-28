@@ -46,6 +46,8 @@ namespace CasseBrique
             _assetsServices.Load<Texture2D>("Paddle");
             _assetsServices.Load<Texture2D>("BallBlue");
             _assetsServices.Load<Texture2D>("GreyBrick");
+            _assetsServices.Load<Texture2D>("buttonDefault");
+            _assetsServices.Load<Texture2D>("buttonSelected");
             _assetsServices.Load<SpriteFont>("BasicText");
 
 
