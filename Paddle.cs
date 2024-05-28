@@ -1,15 +1,16 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Reflection;
-using CasseBrique.Services;
+
 
 namespace CasseBrique
 {
-    internal class Paddle
+    public class Paddle
     {
         private Texture2D texture;
         protected Vector2 position;
-        private Color color = Color.Red;
+        protected Vector2 offset;
+        private Color color = Color.Brown;
         protected Vector2 size;
 
         public Vector2 Position
@@ -24,11 +25,11 @@ namespace CasseBrique
             private set { size = value; }
         }
 
-        public Paddle(Vector2 position)
+        public Paddle(Vector2 StartingPosition)
         {
-            this.texture = ServicesLocator.Get<AssetsService>().Get<Texture2D>("Paddle");
-            this.size = new Vector2(100, 24);
-            this.position = position-size*0.5f;
+            this.texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("Paddle");
+            this.size = new Vector2(104, 24);
+            this.position = StartingPosition - size * 0.5f;
         }
 
         public void Move(Vector2 direction, float speed, float dt)
@@ -48,7 +49,7 @@ namespace CasseBrique
             {
                 position.X = _screenSize.X - size.X;
             }
-            if (position.X <= 0)   
+            if (position.X < 0)   
             {
                 position.X = 0;
             }

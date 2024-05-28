@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace CasseBrique
 {
-    internal class Briques
+    internal class Tilemap
     {
-        public Briques() { }
-
     }
 }

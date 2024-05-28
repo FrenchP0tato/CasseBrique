@@ -25,6 +25,13 @@
 /processorParam:TextureFormat=Color
 /build:BallBlue.png
 
+#begin BasicText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:BasicText.spritefont
+
 #begin BlueBrick.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -36,6 +43,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:BlueBrick.png
+
+#begin CityLevela.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:CityLevela.png
 
 #begin GreenBrick.png
 /importer:TextureImporter

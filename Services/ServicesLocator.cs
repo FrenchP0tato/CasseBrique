@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CasseBrique.Services
+namespace CasseBrique
 {
     public static class ServicesLocator
     {

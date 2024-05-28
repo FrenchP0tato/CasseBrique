@@ -3,15 +3,20 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace CasseBrique.Services
+namespace CasseBrique
 {
-    public class AssetsService
+    public interface IAssetsService
+    {
+        public T Get<T>(string name);
+    }
+
+    public class AssetsService : IAssetsService
     {
         private Dictionary<string,object> _assets = new Dictionary<string,object>();
 
         public AssetsService() 
         {
-            ServicesLocator.Register<AssetsService>(this);
+            ServicesLocator.Register<IAssetsService>(this);
         }
 
         public void Load<T>(string name)
