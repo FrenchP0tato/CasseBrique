@@ -37,7 +37,6 @@ namespace CasseBrique
             // MyBall.CheckBricks(_BriqueList);
             //}
 
-
         private List<Brique> GenerateBricks(int rows, int columns, int brickWidth, int brickHeight, Vector2 Startposition) // arrive pas à mettre dans bricks. 
         {
             var bricksList = new List<Brique>();
