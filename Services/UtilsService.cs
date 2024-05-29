@@ -15,14 +15,7 @@ namespace CasseBrique
         }
 
 
-        public bool CheckRoundCollision(Vector2 ObjectPos, float ObjectRadius, Vector2 TargetPos, float TargetRadius)
-        {
-            float distance = Vector2.Distance(ObjectPos, TargetPos);
-            return distance < (ObjectRadius + TargetRadius);
-        }
-
-
-        public void CheckBallBrickCollision(Ball ball, Brique brick) //remplacer par sprite? ou classe square objects
+        public void CheckBallBrickCollision(Ball ball, Brique brick) //remplacer par formule avec colliders de Nicolas
         {
             float brickWidth = brick.size.X;
             float brickHeight = brick.size.Y;

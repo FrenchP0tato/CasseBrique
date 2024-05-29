@@ -12,7 +12,6 @@ namespace CasseBrique
             ServicesLocator.Register<MouseService>(this);
         }
 
-
         public bool CheckMouseClicks(MouseState oldMouseState, MouseState NewMouseState)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
@@ -30,10 +29,12 @@ namespace CasseBrique
                 NewMouseState.X <= objectPos.X + objectSize.X &&
                 NewMouseState.X <= objectPos.Y + objectSize.Y)
             {
-                Console.WriteLine("object cliqué cliquée");
+                Console.WriteLine("object cliqué");
                 return true;
             }
-            else return false;
+            else
+                Console.WriteLine("rien cliqué");
+                    return false;
         }
     }
 }

@@ -26,16 +26,12 @@ namespace CasseBrique
         }
 
 
-        // public override void Update(float dt)
-        // {
-            // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.M))
-                // ServicesLocator.Get<IScenesManager>().Load<SceneMenu>();
-
-            
-
-            // MyBall.PadRebound(MyPaddle);
-            // MyBall.CheckBricks(_BriqueList);
-            //}
+        public override void Update(float dt)
+         {
+             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.M))
+                ServicesLocator.Get<IScenesManager>().Load<SceneMenu>();
+             base.Update(dt);
+            }
 
         private List<Brique> GenerateBricks(int rows, int columns, int brickWidth, int brickHeight, Vector2 Startposition) // arrive pas à mettre dans bricks. 
         {

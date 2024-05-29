@@ -37,6 +37,7 @@ namespace CasseBrique
             _mouseService = new MouseService();
             _scenesManager = new ScenesManager();
 
+            _screenService.SetSize(1280, 720);
             base.Initialize();
         }
 

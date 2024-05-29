@@ -11,7 +11,7 @@ namespace CasseBrique.GameObjects
     public class Ball : SpriteGameObject
     {
         public Vector2 _direction;
-        private float _speed;
+        private float _speed = 400f;
         private Rectangle _bounds;
         public float radius => texture.Width * 0.5f;
 
@@ -25,7 +25,6 @@ namespace CasseBrique.GameObjects
             color = Color.Red;
             _bounds = bounds;
             _direction = direction;
-            _speed = 400f;
             size.X = texture.Width;
             size.Y = texture.Height;
             offset = size * 0.5f;
@@ -44,17 +43,19 @@ namespace CasseBrique.GameObjects
 
         public override void Update(float dt)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Space))
-                Shoot(new Vector2(-2, -1));
-
             if (isShot)
             {
                 Move(dt);
                 Bounce();
+                CheckOutOfbounds();
+                //add Method for colliders
             }
             else
             {
-                // position = pos - size * 0.5f; -find a way to get paddle position
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Space))
+                    Shoot(new Vector2(-2, -1));
+                var pad = root.GetGameObjects<Paddle>()[0];
+                position=new Vector2(pad.position.X, pad.position.Y);
             }
         }
 
@@ -67,53 +68,32 @@ namespace CasseBrique.GameObjects
 
         private void Bounce()
         {
-            if (position.X > _bounds.Right - radius)
+            if (position.X > _bounds.Right - offset.X)
             {
-                position.X = _bounds.Right - radius;
+                position.X = _bounds.Right - offset.X;
                 _direction.X *= -1;
             }
-            else if (position.X < _bounds.Left + radius)
+            else if (position.X < _bounds.Left + offset.X)
             {
-                position.X = _bounds.Left + radius;
+                position.X = _bounds.Left + offset.X;
                 _direction.X *= -1;
             }
-            if (position.Y > _bounds.Bottom - radius)
+
+            if (position.Y < _bounds.Top + offset.Y)
             {
-                position.Y = _bounds.Bottom - radius;
+                position.Y = _bounds.Top + offset.Y;
                 _direction.Y *= -1;
             }
-            else if (position.Y < _bounds.Top + radius)
-            {
-                position.Y = _bounds.Top + radius;
-                _direction.Y *= -1;
-            }
+            _direction.Normalize();
         }
 
-
-
-        public void CheckBricks(List<Brique> briques)
+        private void CheckOutOfbounds()
         {
-            foreach (var brick in briques)
+        if (position.Y > _bounds.Bottom - offset.Y)
             {
-                ServicesLocator.Get<UtilsService>().CheckBallBrickCollision(this, brick);
+                isShot = false;
+                // add looselife
             }
-        }
-
-        public void PadRebound(SpriteGameObject pad) // a revoir pour rajouter les autres cotés!
-        {
-            if (position.Y + size.Y >= pad.position.Y) // si ma balle est sous mon objet // a remplacer par entre le haut et le bas de mon objet
-            {
-                if (position.X + size.X >= pad.position.X) // si ma balle est à droite de mon objet
-                {
-                    if (position.X <= pad.position.X + pad.size.X) // si ma alors fait: verifie si X de me balle est inférieur à la position de mon objet plus sa taille
-                    {
-                        position.Y = pad.position.Y - size.Y;
-                        _direction.Y = -_direction.Y;   // rebond horizontal vers le haut
-                    }
-                }
-            }
-        }
-
-    }
+        }   
 
 }

@@ -11,7 +11,7 @@ namespace CasseBrique
         public virtual void Load(){ }
         public virtual void Unload() { }
         
-        public void Update(float dt)
+        public virtual void Update(float dt)
         { 
       foreach(GameObject obj in _gameObjects)
             if (obj.enable)
