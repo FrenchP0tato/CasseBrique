@@ -17,7 +17,8 @@ namespace CasseBrique
         private ScreenService _screenService; //necessaires ou non? 
         private UtilsService _utilsService;
         private ScenesManager _scenesManager;
-        
+        private MouseService _mouseService;
+
 
 
         public Main()
@@ -29,11 +30,11 @@ namespace CasseBrique
 
         protected override void Initialize()
         {    //enregistrement des services
-            ServicesLocator.Register<ContentManager>(Content); 
-            ServicesLocator.Register<GraphicsDeviceManager>(_graphics);
-            _assetsServices = new AssetsService();
-            _screenService = new ScreenService(1240,720);
+            
+            _assetsServices = new AssetsService(Content);
+            _screenService = new ScreenService(_graphics);
             _utilsService = new UtilsService();
+            _mouseService = new MouseService();
             _scenesManager = new ScenesManager();
 
             base.Initialize();
@@ -51,10 +52,7 @@ namespace CasseBrique
             _assetsServices.Load<SpriteFont>("BasicText");
 
 
-            _scenesManager.RegisterScene("Game", new SceneGame());
-            _scenesManager.RegisterScene("Village", new SceneVillage());
-            _scenesManager.RegisterScene("Menu", new SceneMenu());//parlé d'instancier une nouvelle scene??
-            _scenesManager.LoadScene("Menu");
+            _scenesManager.Load<SceneGame>();
 
         }
 
@@ -63,7 +61,7 @@ namespace CasseBrique
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds; //"casté" ma variable: forcé un type
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();  // pas réussi à bouger le exit car utilise une class de game
+                Exit();  // pas réussi à bouger ca car exit utilise une class de game
 
             _scenesManager.Update(dt);
             base.Update(gameTime);
@@ -71,7 +69,7 @@ namespace CasseBrique
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CornflowerBlue); //comment la changer dans une scene? 
 
             _spriteBatch.Begin();
             _scenesManager.Draw(_spriteBatch);

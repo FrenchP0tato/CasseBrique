@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CasseBrique.GameObjects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -41,37 +42,13 @@ namespace CasseBrique
                 
                 if (overlapX < overlapY) // check si colision laterale
                 {
-                    ball.velocity.X= -ball.velocity.X;
+                    ball._direction.X= -ball._direction.X;
                 }
                 else
                 {
-                    ball.velocity.Y= -ball.velocity.Y; // check si collision horizontale
+                    ball._direction.Y= -ball._direction.Y; // check si collision horizontale
                 }
             }
-        }
-
-        public bool CheckMouseClicks(MouseState oldMouseState, MouseState NewMouseState)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
-                ServicesLocator.Get<IScenesManager>().LoadScene("Game");
-            if (NewMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released)
-            {
-            return true;
-            }
-            return false;
-        }
-
-        public bool CheckObjectClick(MouseState NewMouseState, Vector2 objectPos, Vector2 objectSize)
-        {
-            if (NewMouseState.X>=objectPos.X &&
-                NewMouseState.Y>=objectPos.Y &&
-                NewMouseState.X<=objectPos.X+objectSize.X &&
-                NewMouseState.X<=objectPos.Y+objectSize.Y)
-            {
-                Console.WriteLine("image cliquée");
-                return true;
-            }
-            else return false;
         }
 
     }

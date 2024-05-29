@@ -3,30 +3,45 @@
 
 namespace CasseBrique
 {
-    public class ScreenService
+    public interface IScreenService
     {
-        public ScreenService(int width, int height) 
+         int Width { get; }
+         int Height { get; }
+        int Top { get; }
+        int Left { get; }
+        int Right { get; }
+        int Bottom { get; }
+        Vector2 TopLeft { get; }
+        Vector2 BotRight { get; }
+        Vector2 Center { get; }
+        Rectangle Bounds { get; }
+    }
+    public sealed class ScreenService:IScreenService // aucune classe ne peut hériter
+    {
+        private GraphicsDeviceManager _graphicsDeviceManager;
+        public ScreenService(GraphicsDeviceManager graphicsDeviceManager) 
         {
-        SetSize(width, height);
-        ServicesLocator.Register<ScreenService>(this);
+        _graphicsDeviceManager =graphicsDeviceManager;
+        ServicesLocator.Register<IScreenService>(this);
         }
 
        public void SetSize(int width, int height)
         {
-            var graphics = ServicesLocator.Get<GraphicsDeviceManager>();
-            graphics.PreferredBackBufferWidth = width;
-            graphics.PreferredBackBufferHeight = height;
-            graphics.ApplyChanges();
+
+            _graphicsDeviceManager.PreferredBackBufferWidth = width;
+            _graphicsDeviceManager.PreferredBackBufferHeight = height;
+            _graphicsDeviceManager.ApplyChanges();
         }
 
-        public int width => ServicesLocator.Get<GraphicsDeviceManager>().PreferredBackBufferWidth;
-        public int height => ServicesLocator.Get<GraphicsDeviceManager>().PreferredBackBufferHeight;
-        public int top => 0;
-        public int left => 0;
-        public int right => width;
-        public int bottom => height;
-        public Vector2 topLeft => Vector2.Zero;
-        public Vector2 botRight => new Vector2(width,height);
-        public Vector2 center => botRight * .5f;
+        public int Width => _graphicsDeviceManager.PreferredBackBufferWidth;
+        public int Height => _graphicsDeviceManager.PreferredBackBufferHeight;
+        public int Top => 0;
+        public int Left => 0;
+        public int Right => Width;
+        public int Bottom => Height;
+        public Vector2 TopLeft => Vector2.Zero;
+        public Vector2 BotRight => new (Width,Height);
+        public Vector2 Center => BotRight * .5f;
+        public Rectangle Bounds => new (Top,Left,Width,Height);
     }
 }

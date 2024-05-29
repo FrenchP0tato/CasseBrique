@@ -7,52 +7,28 @@ namespace CasseBrique
 {
     public interface IScenesManager
     {
-        public void LoadScene(string sceneName);
+        void Load<T>() where T : Scene, new();
     }
 
-
-    internal class ScenesManager : IScenesManager
+    public sealed class ScenesManager : IScenesManager
     {
         private Scene _currentScene;
-        private Dictionary<string, Scene> _scenes = new Dictionary<string, Scene>();
 
         public ScenesManager() 
         {
             ServicesLocator.Register<IScenesManager>(this);
                 }
 
-
-        public void RegisterScene(string sceneName, Scene scene)
+        public void Load<T>() where T : Scene, new()
         {
-            if (_scenes.ContainsKey(sceneName))
-                throw new InvalidOperationException($"Scene Manager: Scene of name {sceneName} is already registered.");
-            _scenes[sceneName] = scene;
-        }
-
-        public void LoadScene(string sceneName)
-        {
-            if (!_scenes.ContainsKey(sceneName))
-                throw new InvalidOperationException($"Scene Manager: Scene of name {sceneName} not registered.");
+            var type=typeof(T);
             if (_currentScene != null) _currentScene.Unload();
-            _currentScene = _scenes[sceneName];
+            _currentScene = new T();
             _currentScene.Load();
-
-
         }
 
-        public void Update(float dt)
-        {
-            if (_currentScene != null)
-                _currentScene.Update(dt);
-        }
-
-        public void Draw(SpriteBatch sb)
-        {
-            if (_currentScene != null)
-                _currentScene.Draw(sb);
-
-        }
-
-
+        public void Update(float dt) => _currentScene?.Update(dt);
+        public void Draw(SpriteBatch sb) => _currentScene?.Draw(sb);
+        
     }
 }

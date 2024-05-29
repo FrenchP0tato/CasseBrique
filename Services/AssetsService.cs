@@ -10,19 +10,22 @@ namespace CasseBrique
         public T Get<T>(string name);
     }
 
-    public class AssetsService : IAssetsService
+    public sealed class AssetsService : IAssetsService
     {
         private Dictionary<string,object> _assets = new Dictionary<string,object>();
+        private ContentManager _contentManager;
 
-        public AssetsService() 
+        public AssetsService(ContentManager contentManager) 
         {
+            _contentManager = contentManager;
             ServicesLocator.Register<IAssetsService>(this);
         }
 
         public void Load<T>(string name)
         {
-            ContentManager content = ServicesLocator.Get<ContentManager>();
-            T asset = content.Load<T>(name);
+            if (_assets.ContainsKey(name))
+                throw new InvalidOperationException($"Assets service: Asset with name {name} is already registered");
+            T asset = _contentManager.Load<T>(name);
             _assets.Add(name, asset);
         }
 
