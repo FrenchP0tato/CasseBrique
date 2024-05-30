@@ -8,21 +8,40 @@ namespace CasseBrique
 {
     public class SceneGame : Scene
     {
-
-        List<Brique> _BriqueList; // pas reussi à faire gérer la liste par ma classe brique: je n'arrivais pas à l'appeler. Ai essayé dans constructeur mais pas réussi
-
-
         public override void Load()
         {
             IScreenService screen =ServicesLocator.Get<IScreenService>();
-            
-            AddGameObject(new Ball(screen.Bounds,Vector2.One,this)); // to redo: manage position on the Paddle to start with
-            AddGameObject(new Paddle(screen.Bounds,new Vector2(screen.Center.X,screen.Bottom-30),this));
+            Rectangle bounds=screen.Bounds;
+            AddGameObject(new Ball(bounds,this)); 
+            AddGameObject(new Paddle(bounds,this));
+            AddBricks(bounds);            
+        }
 
-            _BriqueList = GenerateBricks(1, 10, 50, 50, new Vector2(100, 50));
-            
-            AddGameObject(new Brique(new Vector2(400, 400), Color.Gray,this));
+        private void AddBricks(Rectangle bounds)
+        {
+            var brickLayout = ServicesLocator.Get<GameController>().GetBricksLayout();
+            var brickTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrick");
+            int columns = brickLayout.GetLength(0); // vraiment je comprends pas pourquoi get Lenght de 0 ou 1 ca fait des colonnes ou des lignes...
+            int rows = brickLayout.GetLength(1);
 
+            int spaceBetweenBricks = 10;
+            int verticaloffset = 10;
+
+            float totalWidth =columns*(brickTexture.Width+spaceBetweenBricks)-spaceBetweenBricks;
+            float offsetX = (bounds.Width - totalWidth) * .5f;
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int column = 0; column < columns; column++)
+                {
+                    float x =bounds.X+offsetX+column*(brickTexture.Width+spaceBetweenBricks);
+                    float y = bounds.Y + verticaloffset + row * (brickTexture.Height + spaceBetweenBricks);
+
+                    Brique brick = new Brique(Color.Gray,this);
+                    brick.position= new Vector2(x,y);
+                    AddGameObject(brick);
+                }
+            }
         }
 
 
@@ -32,23 +51,5 @@ namespace CasseBrique
                 ServicesLocator.Get<IScenesManager>().Load<SceneMenu>();
              base.Update(dt);
             }
-
-        private List<Brique> GenerateBricks(int rows, int columns, int brickWidth, int brickHeight, Vector2 Startposition) // arrive pas à mettre dans bricks. 
-        {
-            var bricksList = new List<Brique>();
-
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < columns; col++)
-                {
-                    Vector2 position = new Vector2(Startposition.X + col * (brickWidth + 20), Startposition.Y + row * (brickHeight + 20));
-                    bricksList.Add(new Brique(position, Color.Gray,this));
-                }
-            }
-
-            return bricksList;
-        }
-
-
     }
 }

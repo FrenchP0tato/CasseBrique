@@ -15,9 +15,7 @@ namespace CasseBrique
         private SpriteBatch _spriteBatch;
         private AssetsService _assetsServices;
         private ScreenService _screenService; //necessaires ou non? 
-        private UtilsService _utilsService;
         private ScenesManager _scenesManager;
-        private MouseService _mouseService;
 
 
 
@@ -30,11 +28,11 @@ namespace CasseBrique
 
         protected override void Initialize()
         {    //enregistrement des services
-            
-            _assetsServices = new AssetsService(Content);
-            _screenService = new ScreenService(_graphics);
-            _utilsService = new UtilsService();
-            _mouseService = new MouseService();
+            new GameController();
+            _assetsServices=new AssetsService(Content);
+            _screenService= new ScreenService(_graphics);
+            new UtilsService();
+            new MouseService();
             _scenesManager = new ScenesManager();
 
             _screenService.SetSize(1280, 720);
