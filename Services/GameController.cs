@@ -9,19 +9,20 @@ namespace CasseBrique
     {
         public int currentLevel { get; private set; } = 1;
         public int maxLevel { get; private set; } = 0;
-        public int score { get; private set; } = 0; // replace with resources // start with individuals, then add list
+        public int score { get; private set; } = 0; //replace with nb of days? 
+        public List<Resource> Resources; // replace with resources // start with individuals, then add list
         public int lifes { get; private set; } = 3; // replace with current level life - OR with FOOD, but replace also BallOut Method! 
 
         public GameController()
         {
             ServicesLocator.Register<GameController>(this);
-            //maxLevel = CountLevels();
+            maxLevel = CountLevels();
         }
 
         public void Reset()
         {
             currentLevel = 1;
-            score = 0;
+            Resources.Clear();
             lifes = 3;
 
         }
@@ -39,7 +40,10 @@ namespace CasseBrique
 
         public void GainResource(Resource resource,int nb)
         {
-            score = score+ nb; //replace with different resources
+            for (int i = 0; i < nb; i++)
+            {
+                Resources.Add(resource);
+            }
         }
 
         public int[,] GetBricksLayout()

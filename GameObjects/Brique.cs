@@ -30,7 +30,7 @@ namespace CasseBrique.GameObjects
             size.X = texture.Width;
             size.Y = texture.Height;
             this.color = color;
-            life = 2;
+            life = 1;
             size.X = texture.Width;
             size.Y = texture.Height;
             offset = size * 0.5f;
@@ -50,15 +50,15 @@ namespace CasseBrique.GameObjects
         {
             life -= damage;
             if (life <= 0)
-            { 
-                //DropResource()
+            {
+                DropResource(NbResource, resource);
                 enable=false;
                 isFree = true; }
         }
 
         public void DropResource(int nb, Resource resource)
         {
-
+            ServicesLocator.Get<GameController>().GainResource(resource, nb);
         }
 
     }

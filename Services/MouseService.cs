@@ -22,19 +22,20 @@ namespace CasseBrique
             else return false;
         }
 
-        public bool CheckObjectClick(MouseState NewMouseState, Vector2 objectPos, Vector2 objectSize)
+        public bool CheckObjectClick(MouseState NewMouseState, Vector2 objectPos, Vector2 offset)
         {
-            if (NewMouseState.X >= objectPos.X &&
-                NewMouseState.Y >= objectPos.Y &&
-                NewMouseState.X <= objectPos.X + objectSize.X &&
-                NewMouseState.X <= objectPos.Y + objectSize.Y)
+            if (NewMouseState.X >= objectPos.X-offset.X &&
+                NewMouseState.Y >= objectPos.Y- offset.Y &&
+                NewMouseState.X <= objectPos.X + offset.X &&
+                NewMouseState.Y <= objectPos.Y + offset.Y)
+                
             {
-                Console.WriteLine("object cliqué");
                 return true;
             }
             else
-                Console.WriteLine("rien cliqué");
-                    return false;
+            {
+             return false;
+            }
         }
     }
 }

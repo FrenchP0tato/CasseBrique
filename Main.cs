@@ -49,6 +49,7 @@ namespace CasseBrique
             _assetsServices.Load<Texture2D>("buttonDefault");
             _assetsServices.Load<Texture2D>("buttonSelected");
             _assetsServices.Load<SpriteFont>("BasicText");
+            _assetsServices.Load<Texture2D>("MenuBackground");
 
 
             _scenesManager.Load<SceneGame>();

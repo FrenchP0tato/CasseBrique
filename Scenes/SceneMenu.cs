@@ -14,7 +14,7 @@ namespace CasseBrique
         {
             IScreenService screen = ServicesLocator.Get<IScreenService>();
        
-            AddGameObject(new Button("Default", new Vector2(screen.Center.X, screen.Bottom - 30),this));
+            AddGameObject(new Button("Game", "Start Game", new Vector2(screen.Center.X, screen.Center.Y),this));
             
         }
 

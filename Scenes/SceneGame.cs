@@ -8,7 +8,7 @@ namespace CasseBrique
 {
     public class SceneGame : Scene
     {
-        public override void Load()
+        public override void Load() //peut modifier pour passer des paramètres d'une scène à l'autre! Va devoir modifier pour l'etat du niveau...
         {
             IScreenService screen =ServicesLocator.Get<IScreenService>();
             Rectangle bounds=screen.Bounds;
@@ -24,8 +24,9 @@ namespace CasseBrique
             int columns = brickLayout.GetLength(0); // vraiment je comprends pas pourquoi get Lenght de 0 ou 1 ca fait des colonnes ou des lignes...
             int rows = brickLayout.GetLength(1);
 
+
             int spaceBetweenBricks = 10;
-            int verticaloffset = 10;
+            int verticaloffset = 200;
 
             float totalWidth =columns*(brickTexture.Width+spaceBetweenBricks)-spaceBetweenBricks;
             float offsetX = (bounds.Width - totalWidth) * .5f;
@@ -34,12 +35,16 @@ namespace CasseBrique
             {
                 for (int column = 0; column < columns; column++)
                 {
-                    float x =bounds.X+offsetX+column*(brickTexture.Width+spaceBetweenBricks);
-                    float y = bounds.Y + verticaloffset + row * (brickTexture.Height + spaceBetweenBricks);
+                    if (brickLayout[column, row] == 1)
+                    {
 
-                    Brique brick = new Brique(Color.Gray,this);
-                    brick.position= new Vector2(x,y);
-                    AddGameObject(brick);
+                        float x = bounds.X + offsetX + column * (brickTexture.Width + spaceBetweenBricks);
+                        float y = bounds.Y + verticaloffset + row * (brickTexture.Height + spaceBetweenBricks);
+
+                        Brique brick = new Brique(Color.Gray, this);
+                        brick.position = new Vector2(x, y);
+                        AddGameObject(brick);
+                    }
                 }
             }
         }
@@ -47,8 +52,18 @@ namespace CasseBrique
 
         public override void Update(float dt)
          {
-             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.M))
-                ServicesLocator.Get<IScenesManager>().Load<SceneMenu>();
+            var bricks = GetGameObjects<Brique>();
+            var gc = ServicesLocator.Get<GameController>();
+            var sc = ServicesLocator.Get<IScenesManager>();
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.M))
+                sc.Load<SceneMenu>();
+
+            if (bricks.Count == 0)
+            {
+                gc.MoveToNextLevel();
+                sc.Load<SceneGame>();
+            }
              base.Update(dt);
             }
     }

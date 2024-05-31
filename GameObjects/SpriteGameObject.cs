@@ -14,6 +14,7 @@ namespace CasseBrique.GameObjects
         public Vector2 size;
         public Vector2 offset;
         public string tag;
+        public SpriteEffects effect;
 
         public Rectangle collider
         { get
@@ -31,6 +32,7 @@ namespace CasseBrique.GameObjects
             scale = Vector2.One;
             offset=Vector2.Zero;
             tag = "Sprite";
+            effect = SpriteEffects.None;
             
         }
 
@@ -47,7 +49,7 @@ namespace CasseBrique.GameObjects
         public override void Draw(SpriteBatch sb)
         {
             if (texture == null) return;
-            sb.Draw(texture, position, null, color, rotation, offset, scale, SpriteEffects.None, 0);
+            sb.Draw(texture, position, null, color, rotation, offset, scale, effect, 0);
         }
 
         public virtual void OnCollide(SpriteGameObject other) { }
