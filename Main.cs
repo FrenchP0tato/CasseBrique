@@ -42,16 +42,18 @@ namespace CasseBrique
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _assetsServices.Load<Texture2D>("CityLevela");
             _assetsServices.Load<Texture2D>("Paddle");
             _assetsServices.Load<Texture2D>("BallBlue");
             _assetsServices.Load<Texture2D>("GreyBrick");
+            _assetsServices.Load<Texture2D>("GreyBrickDamaged");
             _assetsServices.Load<Texture2D>("buttonDefault");
             _assetsServices.Load<Texture2D>("buttonSelected");
             _assetsServices.Load<SpriteFont>("BasicText");
-            _assetsServices.Load<Texture2D>("MenuBackground");
-
-
+            _assetsServices.Load<Texture2D>("VillageBackground");
+            for (int i= 1; i <= ServicesLocator.Get<GameController>().maxLevel; i++)
+                {
+                _assetsServices.Load<Texture2D>($"Level{i}");
+            }
             _scenesManager.Load<SceneGame>();
 
         }

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 using CasseBrique.GameObjects;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CasseBrique
 {
@@ -10,6 +13,9 @@ namespace CasseBrique
         public int currentLevel { get; private set; } = 1;
         public int maxLevel { get; private set; } = 0;
         public int score { get; private set; } = 0; //replace with nb of days? 
+
+
+
         public List<Resource> Resources; // replace with resources // start with individuals, then add list
         public int lifes { get; private set; } = 3; // replace with current level life - OR with FOOD, but replace also BallOut Method! 
 
@@ -29,7 +35,11 @@ namespace CasseBrique
 
         public void MoveToNextLevel()
         {
-            currentLevel++;
+            if (currentLevel < maxLevel)
+            {
+                currentLevel++;
+            }
+            // add game completion condition
         }
 
         public void BallOut()
@@ -81,6 +91,13 @@ namespace CasseBrique
             {
                 throw new DirectoryNotFoundException($"The directory with {path} doesn't exist)");
             }
+        }
+
+        public string GetLevel()
+        {
+            string level = $"Level{currentLevel}";
+            return level;
+
         }
     }
 }

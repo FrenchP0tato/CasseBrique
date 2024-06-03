@@ -14,7 +14,7 @@ namespace CasseBrique.GameObjects
         private float _speed = 400f;
         private Vector2 _velocity;
         private Rectangle _bounds;
-        private float Radius => texture.Width * 0.5f;
+        private float radius => texture.Width * 0.5f;
 
         private bool isShot = false;
         private int _damage;
@@ -77,7 +77,7 @@ namespace CasseBrique.GameObjects
             }
         }
 
-        public void Move(float dt)
+        private void Move(float dt)
         {
             _velocity = _direction * _speed*dt;
             position += _velocity;

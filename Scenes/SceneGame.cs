@@ -3,15 +3,26 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using CasseBrique.Services;
 
 namespace CasseBrique
 {
     public class SceneGame : Scene
     {
+        private Texture2D textureBackGround;
+        private Background backGround;
+
         public override void Load() //peut modifier pour passer des paramètres d'une scène à l'autre! Va devoir modifier pour l'etat du niveau...
         {
             IScreenService screen =ServicesLocator.Get<IScreenService>();
-            Rectangle bounds=screen.Bounds;
+            Rectangle bounds = new Rectangle(new Point(0,70), new Point (1280, 650));      //screen.Bounds;
+
+            string Level = ServicesLocator.Get<GameController>().GetLevel();
+
+            textureBackGround = ServicesLocator.Get<IAssetsService>().Get<Texture2D>(Level);
+            backGround = new Background("LevelBackground", textureBackGround, this);
+            AddGameObject(backGround);
+
             AddGameObject(new Ball(bounds,this)); 
             AddGameObject(new Paddle(bounds,this));
             AddBricks(bounds);            
@@ -23,7 +34,6 @@ namespace CasseBrique
             var brickTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrick");
             int columns = brickLayout.GetLength(0); // vraiment je comprends pas pourquoi get Lenght de 0 ou 1 ca fait des colonnes ou des lignes...
             int rows = brickLayout.GetLength(1);
-
 
             int spaceBetweenBricks = 10;
             int verticaloffset = 200;
@@ -56,9 +66,19 @@ namespace CasseBrique
             var gc = ServicesLocator.Get<GameController>();
             var sc = ServicesLocator.Get<IScenesManager>();
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.M))
+
+            KeyboardService.GetState();
+            if (KeyboardService.HasBeenPressed(Keys.Enter))
+            {
+                gc.MoveToNextLevel();
+                sc.Load<SceneGame>();
+            }
+
+
+            if (Keyboard.GetState().IsKeyDown(Keys.M))
                 sc.Load<SceneMenu>();
 
+            
             if (bricks.Count == 0)
             {
                 gc.MoveToNextLevel();
@@ -66,5 +86,7 @@ namespace CasseBrique
             }
              base.Update(dt);
             }
+
+
     }
 }

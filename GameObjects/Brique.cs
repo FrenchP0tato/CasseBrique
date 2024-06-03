@@ -10,6 +10,7 @@ namespace CasseBrique.GameObjects
         private int life;
         private Resource resource;
         private int NbResource;
+        private Texture2D damagedTexture;
         
         public Vector2 Size
         {
@@ -24,41 +25,43 @@ namespace CasseBrique.GameObjects
             private set { position = value; } //accesseur
         }
 
-        public Brique(Color color, Scene root) : base(root) // a recevoir de la part de la Tilemap et du level maker
+        public Brique(Color pColor, Scene pRoot) : base(pRoot) // a recevoir de la part de la Tilemap et du level maker
         {
             texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrick"); // a recevoir du constructeur des héritiers
+            damagedTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrickDamaged");
             size.X = texture.Width;
             size.Y = texture.Height;
-            this.color = color;
-            life = 1;
+            this.color = pColor;
+            life = 2;
             size.X = texture.Width;
             size.Y = texture.Height;
             offset = size * 0.5f;
             tag = "Brique";
         }
 
-        public override void OnCollide(SpriteGameObject other)
+        public override void OnCollide(SpriteGameObject pOther)
         {
-            if (other is Ball)
+            if (pOther is Ball)
             {
                 var ball = root.GetGameObjects<Ball>()[0];
                 TakeDamage(ball.Damage);
             }
         }
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(int pDamage)
         {
-            life -= damage;
+            life -= pDamage;
+            texture = damagedTexture;
             if (life <= 0)
             {
-                DropResource(NbResource, resource);
+                DropResource(NbResource, resource); // add animation for resource drop
                 enable=false;
                 isFree = true; }
         }
 
-        public void DropResource(int nb, Resource resource)
+        public void DropResource(int pNb, Resource pResource)
         {
-            ServicesLocator.Get<GameController>().GainResource(resource, nb);
+            ServicesLocator.Get<GameController>().GainResource(pResource, pNb);
         }
 
     }

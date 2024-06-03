@@ -10,24 +10,24 @@ namespace CasseBrique.GameObjects
     {
         MouseState oldMouseState;
         private SpriteFont font;
-        private bool CheckClick = false;
+        private bool checkClick = false;
         private string text;
-        private Texture2D HighlightTexture;
-        private Texture2D BasicTexture;
+        private Texture2D highlightTexture;
+        private Texture2D basicTexture;
         private String target;
         
 
 
-        public Button(String Target, String Text, Vector2 Pos, Scene root) : base(root)
+        public Button(String pTarget, String pText, Vector2 pPosition, Scene pRoot) : base(pRoot)
         {
             font = ServicesLocator.Get<IAssetsService>().Get<SpriteFont>("BasicText");
-            text = Text;
-            target = Target;
-            BasicTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("buttonDefault");
-            texture=BasicTexture;
-            HighlightTexture= ServicesLocator.Get<IAssetsService>().Get<Texture2D>("buttonSelected");
-            position.X = Pos.X;
-            position.Y = Pos.Y;
+            text = pText;
+            target = pTarget;
+            basicTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("buttonDefault");
+            texture=basicTexture;
+            highlightTexture= ServicesLocator.Get<IAssetsService>().Get<Texture2D>("buttonSelected");
+            position.X = pPosition.X;
+            position.Y = pPosition.Y;
             size.X = texture.Width;
             size.Y = texture.Height;
             offset = size * 0.5f;
@@ -40,8 +40,8 @@ namespace CasseBrique.GameObjects
             MouseState NewMouseState = Mouse.GetState();
             if (ServicesLocator.Get<MouseService>().CheckMouseClicks(oldMouseState, NewMouseState) == true)
             {
-                CheckClick = ServicesLocator.Get<MouseService>().CheckObjectClick(NewMouseState, position, offset);
-                if (CheckClick)
+                checkClick = ServicesLocator.Get<MouseService>().CheckObjectClick(NewMouseState, position, offset);
+                if (checkClick)
                 {
                     Console.WriteLine("Object Cliqué");
                     isFree = true;

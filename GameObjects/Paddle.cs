@@ -12,21 +12,21 @@ namespace CasseBrique.GameObjects
         private float _speed = 800f;
         private Vector2 _targetPosition;
 
-        public Paddle(Rectangle bounds, Scene root) : base(root)
+        public Paddle(Rectangle pBounds, Scene pRoot) : base(pRoot)
         {
             texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("Paddle");
-            _bounds = bounds;
+            _bounds = pBounds;
             size.X = texture.Width;
             size.Y = texture.Height;
             offset = size * 0.5f;
-            _targetPosition = new Vector2(bounds.Center.X, bounds.Bottom - texture.Height * 0.5f);
+            _targetPosition = new Vector2(pBounds.Center.X, pBounds.Bottom - texture.Height * 0.5f);
             position = _targetPosition;
             tag = "Paddle";
         }
 
-        public void Move(Vector2 direction, float dt)
+        public void Move(Vector2 pDirection, float dt)
         {
-            Vector2 velocity = direction * _speed;
+            Vector2 velocity = pDirection * _speed;
             position += velocity * dt;
         }
 

@@ -24,7 +24,7 @@ namespace CasseBrique.GameObjects
 
         }
 
-        public SpriteGameObject(Scene root) : base(true, root)
+        public SpriteGameObject(Scene pRoot) : base(true, pRoot)
         {
             position = Vector2.Zero;
             color = Color.White;
@@ -36,9 +36,9 @@ namespace CasseBrique.GameObjects
             
         }
 
-        public SpriteGameObject(Vector2 position, Scene root) : base(true, root)
+        public SpriteGameObject(Vector2 pPosition, Scene pRoot) : base(true, pRoot)
         {
-            this.position = position;
+            this.position = pPosition;
             color = Color.White;
             rotation = 0f;
             scale = Vector2.One;

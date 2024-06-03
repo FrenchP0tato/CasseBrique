@@ -14,9 +14,6 @@ namespace CasseBrique
 
         public bool CheckMouseClicks(MouseState oldMouseState, MouseState NewMouseState)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
-            { ServicesLocator.Get<IScenesManager>().Load<SceneGame>(); }
-
             if (NewMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released)
             { return true; }
             else return false;
