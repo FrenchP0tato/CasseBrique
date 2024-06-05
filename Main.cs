@@ -79,7 +79,7 @@ namespace CasseBrique
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black); //comment la changer dans une scene? 
+            GraphicsDevice.Clear(Color.Black); //comment la changer dans une scene? -> Trouvé: utiliser SB.GraphicsDevice
             
             _spriteBatch.Begin();
             _scenesManager.Draw(_spriteBatch);

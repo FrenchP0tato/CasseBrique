@@ -33,7 +33,7 @@ namespace CasseBrique.GameObjects
             texture.SetData(new[] { Color.Black } );
 
             sb.Draw(texture, bounds,Color.White);
-            sb.DrawString(font, $"Nombre de vies restantes: {gc.lifes} -- Niveau actuel: {gc.currentLevel} -- Resources: {gc.ResourceTable}", Vector2.One, Color.AliceBlue);
+            sb.DrawString(font, $"Nombre de vies restantes: {gc.lifes} -- Niveau actuel: {gc.currentLevel} -- Resources: Bois {gc.ResourceTable[1]}", Vector2.One, Color.AliceBlue);
 
         }
 

@@ -25,7 +25,7 @@ namespace CasseBrique
         {
             ServicesLocator.Register<GameController>(this);
             maxLevel = CountLevels();
-            ResourceTable = new int[5] { 1, 3, 0, 0, 0 };
+            ResourceTable = new int[5] { 1, 3, 0, 0, 0 }; // arrive pas à l'afficher...? 
         }
 
         public void Reset()
