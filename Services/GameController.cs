@@ -14,15 +14,18 @@ namespace CasseBrique
         public int maxLevel { get; private set; } = 0;
         public int score { get; private set; } = 0; //replace with nb of days? 
 
-
-
         public List<Resource> Resources; // replace with resources // start with individuals, then add list
+
+        public int[] ResourceTable;
+
+
         public int lifes { get; private set; } = 3; // replace with current level life - OR with FOOD, but replace also BallOut Method! 
 
         public GameController()
         {
             ServicesLocator.Register<GameController>(this);
             maxLevel = CountLevels();
+            ResourceTable = new int[5] { 1, 3, 0, 0, 0 };
         }
 
         public void Reset()
@@ -30,7 +33,8 @@ namespace CasseBrique
             currentLevel = 1;
             Resources.Clear();
             lifes = 3;
-
+            ResourceTable = new int[5] { 0, 0, 0, 0, 0 };  // ATTENTION, utiliser resourceTable[0] pour acceder au premier item de la liste
+            score = 0;
         }
 
         public void MoveToNextLevel()
@@ -52,7 +56,7 @@ namespace CasseBrique
         {
             for (int i = 0; i < nb; i++)
             {
-                Resources.Add(resource);
+                Resources.Add(resource); // Liste ou Tableau??? 
             }
         }
 
@@ -69,13 +73,21 @@ namespace CasseBrique
                 }
             }
 
-            int rows=lines.Count;
+            int rows=lines.Count; 
             int columns = lines[0].Length;
             int[,] bricksLayout = new int[columns, rows];
 
-            for (int row = 0; row<rows;row++)
-                for (int column = 0;column<columns; column++)
-                    bricksLayout[column,row]= lines[row][column] =='1' ? 1: 0; //a revoir pour types de briques! Si j'ai un un dans mon fichier, c'est vrai, met un, sinon met 0
+            for (int row = 0; row < rows; row++)
+                for (int column = 0; column < columns; column++)
+                {
+                    if (lines[row][column] == '0') bricksLayout[column,row] = 0;
+                    if (lines[row][column] == '1') bricksLayout[column, row] = 1;
+                    if (lines[row][column] == '2') bricksLayout[column, row] = 2;
+                    if (lines[row][column] == '3') bricksLayout[column, row] = 3;
+                    if (lines[row][column] == '4') bricksLayout[column, row] = 4;
+                    if (lines[row][column] == '5') bricksLayout[column, row] = 5;
+                    //bricksLayout[column, row] = lines[row][column] =='1' ? 1:0; (rappel: Synthaxe condition ternaire) 
+                }
             return bricksLayout;
         }
 

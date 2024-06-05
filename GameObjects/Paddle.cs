@@ -22,6 +22,7 @@ namespace CasseBrique.GameObjects
             _targetPosition = new Vector2(pBounds.Center.X, pBounds.Bottom - texture.Height * 0.5f);
             position = _targetPosition;
             tag = "Paddle";
+            color = Color.SaddleBrown;
         }
 
         public void Move(Vector2 pDirection, float dt)

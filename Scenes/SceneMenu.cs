@@ -16,7 +16,8 @@ namespace CasseBrique
             IScreenService screen = ServicesLocator.Get<IScreenService>();
        
             AddGameObject(new Button("Game", "Start Game", new Vector2(screen.Center.X, screen.Center.Y),this));
-            
+            AddGameObject(new Button("Village", "See your Raft", new Vector2(screen.Center.X, screen.Center.Y+60), this));
+
         }
 
         public override void Update(float dt)
@@ -28,6 +29,7 @@ namespace CasseBrique
             base.Update(dt);
         }
         // Ancienement dans le draw: sb.DrawString(font, "Scene Menu, Appuyez sur V pour aller au village, et Entrer pour le jeu", Vector2.One, Color.AliceBlue);
+
 
     }
 }

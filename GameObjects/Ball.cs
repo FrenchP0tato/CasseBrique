@@ -79,9 +79,9 @@ namespace CasseBrique.GameObjects
 
         private void Move(float dt)
         {
+            _direction.Normalize();
             _velocity = _direction * _speed*dt;
             position += _velocity;
-            _direction.Normalize();
         }
 
         private void BounceOnBounds()

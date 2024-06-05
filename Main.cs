@@ -2,9 +2,14 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Xml.Linq;
 
-// to do urgent:
-// gerrer les colisions carrées!! 
+// Questions pour Nicolas:
+// Aime pas devoir tjr envoyer la balle dans la meme direction, rebonds intelligents? Ou juste envoi dans direction choisie? => Bonus?
+// Pour une liste de resources, liste ou tableau? ou juste ensemble de valeurs gérées par le GameController? 
+// tout simplement; tableau avec 5 valeurs?? 5 int? Mais du coup est-ce qu'on peut faire des operations sur les éléments dans le tableau? 
+// Classe resource utile pour creer, mais ensuite pas utile. J'ai juste besoin de stocker des int de resources, du coup, besoin d'une liste? Mais en meme temps, je sais cb de resources differentes j'ai, donc tableau?
+// Vu que pas de draw dans mes objets, comment fait un effet - ex le bouton s'illumine avant de disparaitre
 
 
 namespace CasseBrique
@@ -16,6 +21,7 @@ namespace CasseBrique
         private AssetsService _assetsServices;
         private ScreenService _screenService; //necessaires ou non? 
         private ScenesManager _scenesManager;
+
 
 
 
@@ -41,7 +47,9 @@ namespace CasseBrique
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice); 
+            
+
             _assetsServices.Load<Texture2D>("Paddle");
             _assetsServices.Load<Texture2D>("BallBlue");
             _assetsServices.Load<Texture2D>("GreyBrick");
@@ -71,8 +79,8 @@ namespace CasseBrique
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue); //comment la changer dans une scene? 
-
+            GraphicsDevice.Clear(Color.Black); //comment la changer dans une scene? 
+            
             _spriteBatch.Begin();
             _scenesManager.Draw(_spriteBatch);
             _spriteBatch.End();

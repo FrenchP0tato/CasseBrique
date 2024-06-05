@@ -48,7 +48,8 @@ namespace CasseBrique.GameObjects
 
         public override void Draw(SpriteBatch sb)
         {
-            if (texture == null) return;
+            //if (texture == null) return;
+            if (texture==null) { texture = new Texture2D(sb.GraphicsDevice, 1, 1); }
             sb.Draw(texture, position, null, color, rotation, offset, scale, effect, 0);
         }
 

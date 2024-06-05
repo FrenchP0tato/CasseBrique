@@ -11,21 +11,9 @@ namespace CasseBrique.GameObjects
         private Resource resource;
         private int NbResource;
         private Texture2D damagedTexture;
-        
-        public Vector2 Size
-        {
-            get { return size; }
-            private set { size = value; }
-        }
-
-
-        public Vector2 Position
-        {
-            get { return position; }
-            private set { position = value; } //accesseur
-        }
-
-        public Brique(Color pColor, Scene pRoot) : base(pRoot) // a recevoir de la part de la Tilemap et du level maker
+        private string text;
+      
+        public Brique(Color pColor, Scene pRoot) : base(pRoot) 
         {
             texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrick"); // a recevoir du constructeur des héritiers
             damagedTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrickDamaged");
@@ -33,9 +21,7 @@ namespace CasseBrique.GameObjects
             size.Y = texture.Height;
             this.color = pColor;
             life = 2;
-            size.X = texture.Width;
-            size.Y = texture.Height;
-            offset = size * 0.5f;
+            //offset = size * 0.5f; pas nécessaire car géré par le Game Controller
             tag = "Brique";
         }
 

@@ -43,7 +43,7 @@ namespace CasseBrique.GameObjects
                 checkClick = ServicesLocator.Get<MouseService>().CheckObjectClick(NewMouseState, position, offset);
                 if (checkClick)
                 {
-                    Console.WriteLine("Object Cliqué");
+                    
                     isFree = true;
 
                     if (this.target == "Game")  // pas réussi à le faire avec un Paramètre directement dans la methode load
@@ -60,8 +60,7 @@ namespace CasseBrique.GameObjects
                     }
 
                 }
-                else
-                { Console.WriteLine("clicking nowhere"); }
+                
             }
             oldMouseState = NewMouseState;
         }
@@ -70,8 +69,10 @@ namespace CasseBrique.GameObjects
         {
             
             base.Draw(sb);
-            Vector2 TextOffset = new Vector2 (30, offset.Y*.5f);
+        
+            Vector2 TextOffset = new Vector2 (text.Length*3f, offset.Y*.5f);
             sb.DrawString(font, text, position-TextOffset, Color.Black);
+
         }
     }
 }
