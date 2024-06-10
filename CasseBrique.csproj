@@ -11,6 +11,11 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\ImpactGold.ogg" />
+    <None Remove="Content\ImpactGrass.ogg" />
+    <None Remove="Content\ImpactPaddle.ogg" />
+    <None Remove="Content\ImpactStone.ogg" />
+    <None Remove="Content\ImpactWood.ogg" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>

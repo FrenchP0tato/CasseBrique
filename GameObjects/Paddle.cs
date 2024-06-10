@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework;
 using System.Reflection;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+
+
 
 
 namespace CasseBrique.GameObjects
@@ -11,7 +14,7 @@ namespace CasseBrique.GameObjects
         private Rectangle _bounds;
         private float _speed = 800f;
         private Vector2 _targetPosition;
-
+        
         public Paddle(Rectangle pBounds, Scene pRoot) : base(pRoot)
         {
             texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("Paddle");
@@ -23,6 +26,7 @@ namespace CasseBrique.GameObjects
             position = _targetPosition;
             tag = "Paddle";
             color = Color.SaddleBrown;
+            impactSound = ServicesLocator.Get<IAssetsService>().Get<SoundEffect>("ImpactPaddle");
         }
 
         public void Move(Vector2 pDirection, float dt)
@@ -42,6 +46,12 @@ namespace CasseBrique.GameObjects
 
             _targetPosition = Vector2.Clamp(_targetPosition, new Vector2(_bounds.Left + offset.X, position.Y), new Vector2(_bounds.Right - offset.X, position.Y));
             position = Vector2.Lerp(position, _targetPosition, 0.15f);
+        }
+
+        public override void OnCollide(SpriteGameObject other)
+        {
+            impactSound.Play(); // deplacer dans le Sprite Game object?
+            base.OnCollide(other);
         }
     }
 }

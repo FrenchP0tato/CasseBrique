@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
+
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Xml.Linq;
+using Microsoft.Xna.Framework.Media;
+
 
 // Questions pour Nicolas:
 // Aime pas devoir tjr envoyer la balle dans la meme direction, rebonds intelligents? Ou juste envoi dans direction choisie? => Bonus?
@@ -19,11 +21,8 @@ namespace CasseBrique
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private AssetsService _assetsServices;
-        private ScreenService _screenService; //necessaires ou non? 
+        private ScreenService _screenService; 
         private ScenesManager _scenesManager;
-
-
-
 
         public Main()
         {
@@ -49,15 +48,29 @@ namespace CasseBrique
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice); 
             
-
+            //Textures
             _assetsServices.Load<Texture2D>("Paddle");
             _assetsServices.Load<Texture2D>("BallBlue");
             _assetsServices.Load<Texture2D>("GreyBrick");
             _assetsServices.Load<Texture2D>("GreyBrickDamaged");
             _assetsServices.Load<Texture2D>("buttonDefault");
             _assetsServices.Load<Texture2D>("buttonSelected");
+
+            //Sons: - a améliorer avec les types de briques directement
+            _assetsServices.Load<Song>("CoolSong");
+            _assetsServices.Load<SoundEffect>("ImpactPaddle");
+            _assetsServices.Load<SoundEffect>("ImpactStone");
+            _assetsServices.Load<SoundEffect>("ImpactWood");
+            _assetsServices.Load<SoundEffect>("ImpactGrass");
+            _assetsServices.Load<SoundEffect>("ImpactGold");
+
+
+            //Autres Assets
             _assetsServices.Load<SpriteFont>("BasicText");
             _assetsServices.Load<Texture2D>("VillageBackground");
+
+
+
             for (int i= 1; i <= ServicesLocator.Get<GameController>().maxLevel; i++)
                 {
                 _assetsServices.Load<Texture2D>($"Level{i}");

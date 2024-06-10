@@ -68,6 +68,12 @@
 /processorParam:TextureFormat=Color
 /build:buttonSelected.png
 
+#begin CoolSong.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:CoolSong.mp3
+
 #begin GreenBrick.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -103,6 +109,36 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:GreyBrickDamaged.png
+
+#begin ImpactGold.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:ImpactGold.ogg
+
+#begin ImpactGrass.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:ImpactGrass.ogg
+
+#begin ImpactPaddle.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:ImpactPaddle.ogg
+
+#begin ImpactStone.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:ImpactStone.ogg
+
+#begin ImpactWood.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:ImpactWood.ogg
 
 #begin Level1.png
 /importer:TextureImporter

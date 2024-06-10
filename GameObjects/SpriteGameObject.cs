@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -15,6 +16,7 @@ namespace CasseBrique.GameObjects
         public Vector2 offset;
         public string tag;
         public SpriteEffects effect;
+        public SoundEffect impactSound;
 
         public Rectangle collider
         { get

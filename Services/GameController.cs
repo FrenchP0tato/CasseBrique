@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using CasseBrique.GameObjects;
@@ -14,7 +15,7 @@ namespace CasseBrique
         public int maxLevel { get; private set; } = 0;
         public int score { get; private set; } = 0; //replace with nb of days? 
 
-        public List<Resource> Resources; // replace with resources // start with individuals, then add list
+        public List<Resource> ListResources; //Class inventory Manager? 
 
         public int[] ResourceTable;
 
@@ -25,13 +26,14 @@ namespace CasseBrique
         {
             ServicesLocator.Register<GameController>(this);
             maxLevel = CountLevels();
-            ResourceTable = new int[5] { 1, 3, 0, 0, 0 }; // arrive pas à l'afficher...? 
+            ResourceTable = new int[5] { 0, 0, 0, 0, 0 }; 
+            ListResources = new List<Resource>();
         }
 
         public void Reset()
         {
             currentLevel = 1;
-            Resources.Clear();
+            ListResources.Clear();
             lifes = 3;
             ResourceTable = new int[5] { 0, 0, 0, 0, 0 };  // ATTENTION, utiliser resourceTable[0] pour acceder au premier item de la liste
             score = 0;
@@ -52,13 +54,35 @@ namespace CasseBrique
             // add change Scene (retour au village) if currentLevelLifes <= 0
         }
 
-        public void GainResource(Resource resource,int nb)
+        public void GainResource(String pResourceType,int pQuantity)
         {
-            for (int i = 0; i < nb; i++)
+            if (ResourceData.Data.ContainsKey(pResourceType))
+
             {
-                Resources.Add(resource); // Liste ou Tableau??? 
+                Resource resource = new Resource(ResourceData.Data[pResourceType]);
+                resource.Quantity = pQuantity;
+                ListResources.Add(resource); // Liste ou Tableau??? 
+
             }
         }
+
+        public void LooseResource(String pResourceType,int pQuantity)
+        {
+            foreach (Resource resource in ListResources)
+                if (resource.Type == pResourceType)
+                { 
+                for (int i = 1; i <= pQuantity; i++) 
+                    { 
+                        ListResources.Remove(resource);
+                    }
+                }
+        }
+
+
+        public List<Resource>GetResourceList() { return ListResources; }
+
+        // need a remove resource
+
 
         public int[,] GetBricksLayout()
         {
