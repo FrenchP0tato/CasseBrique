@@ -48,6 +48,7 @@ namespace CasseBrique.GameObjects
                 life = 1;
                 color = Color.Yellow;
                 impactSound = ServicesLocator.Get<IAssetsService>().Get<SoundEffect>("ImpactGold");
+                NbResource = 5;
             } 
             if (type == "Science") 
             {

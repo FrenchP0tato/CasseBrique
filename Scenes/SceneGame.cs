@@ -5,38 +5,50 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using CasseBrique.Services;
 using Microsoft.Xna.Framework.Media;
+using System;
 
-
+// To do: regler pb de pas 'sauvegarder' les niveaux en cours. -> Loader qqchose à la prochaine scene, mais quoi? Vu que les briques ont été générés par un layout, et que là il me reste qu'une liste? 
+// Coder les bonus / Scene village
 
 namespace CasseBrique
 {
     public class SceneGame : Scene
     {
         bool isPaused = false;
+        public List<Brique> currentBricksList;
+      
 
         public override void Load() //peut modifier pour passer des paramètres d'une scène à l'autre! Va devoir modifier pour l'etat du niveau...
         {
             IScreenService screen =ServicesLocator.Get<IScreenService>();
+            var gc = ServicesLocator.Get<GameController>();
 
             Rectangle bounds = new Rectangle(0, 70, 1280, 650);
 
             string Level = ServicesLocator.Get<GameController>().GetLevel();
+
+            // if (gc.LevelStarted) return;
 
             Song GameSong=ServicesLocator.Get<IAssetsService>().Get<Song>("CoolSong");
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(GameSong);
             MediaPlayer.Volume = 0.1f;
 
-
             AddGameObject(new Background("LevelBackground", ServicesLocator.Get<IAssetsService>().Get<Texture2D>(Level), this));
             AddGameObject(new Interface(this));
             AddGameObject(new Ball(bounds,this)); 
             AddGameObject(new Paddle(bounds,this));
-            AddBricks(bounds);
-            ResourceData.PopulateData();
+
+            AddNewBricks(bounds);
+            gc.LevelStarted = true;
         }
 
-        private void AddBricks(Rectangle bounds)
+        public override void Unload()
+        {
+            base.Unload();
+        }
+
+        private void AddNewBricks(Rectangle bounds)
         {
             var brickLayout = ServicesLocator.Get<GameController>().GetBricksLayout();
             var brickTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrick");
@@ -82,7 +94,6 @@ namespace CasseBrique
             var bricks = GetGameObjects<Brique>();
             var gc = ServicesLocator.Get<GameController>();
             var sc = ServicesLocator.Get<IScenesManager>();
-
 
 
             KeyboardService.GetState();

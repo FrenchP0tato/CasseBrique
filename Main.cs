@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CasseBrique.GameObjects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
 using Microsoft.Xna.Framework.Graphics;
@@ -7,10 +8,8 @@ using Microsoft.Xna.Framework.Media;
 
 
 // Questions pour Nicolas:
+// Comment garder les briques "en cours" quand on accède au Menu?
 // Aime pas devoir tjr envoyer la balle dans la meme direction, rebonds intelligents? Ou juste envoi dans direction choisie? => Bonus?
-// Pour une liste de resources, liste ou tableau? ou juste ensemble de valeurs gérées par le GameController? 
-// tout simplement; tableau avec 5 valeurs?? 5 int? Mais du coup est-ce qu'on peut faire des operations sur les éléments dans le tableau? 
-// Classe resource utile pour creer, mais ensuite pas utile. J'ai juste besoin de stocker des int de resources, du coup, besoin d'une liste? Mais en meme temps, je sais cb de resources differentes j'ai, donc tableau?
 // Vu que pas de draw dans mes objets, comment fait un effet - ex le bouton s'illumine avant de disparaitre
 
 
@@ -39,6 +38,7 @@ namespace CasseBrique
             new UtilsService();
             new MouseService();
             _scenesManager = new ScenesManager();
+            ResourceData.PopulateData();
 
             _screenService.SetSize(1280, 720);
             base.Initialize();
@@ -56,7 +56,7 @@ namespace CasseBrique
             _assetsServices.Load<Texture2D>("buttonDefault");
             _assetsServices.Load<Texture2D>("buttonSelected");
 
-            //Sons: - a améliorer avec les types de briques directement
+            //Sons:
             _assetsServices.Load<Song>("CoolSong");
             _assetsServices.Load<SoundEffect>("ImpactPaddle");
             _assetsServices.Load<SoundEffect>("ImpactStone");

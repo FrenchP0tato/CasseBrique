@@ -31,11 +31,11 @@ namespace CasseBrique.GameObjects
 
         public static void PopulateData()
         {
-            Data.Add("STONE", new Resource { Type = "STONE" , InventorySlot=1});
-            Data.Add("WOOD", new Resource { Type = "WOOD", InventorySlot = 2 });
-            Data.Add("FOOD", new Resource { Type = "FOOD", InventorySlot = 3 });
-            Data.Add("GOLD", new Resource { Type = "GOLD", InventorySlot = 4 });
-            Data.Add("SCIENCE", new Resource { Type = "SCIENCE", InventorySlot = 5 });
+            Data.Add("Stone", new Resource { Type = "Stone" , InventorySlot = 1});
+            Data.Add("Wood", new Resource { Type = "Wood", InventorySlot = 2});
+            Data.Add("Food", new Resource { Type = "Food", InventorySlot = 3});
+            Data.Add("Gold", new Resource { Type = "Gold", InventorySlot = 4 });
+            Data.Add("Science", new Resource { Type = "Science", InventorySlot = 5 });
         }
 
     }

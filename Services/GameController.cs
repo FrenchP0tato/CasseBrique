@@ -13,20 +13,22 @@ namespace CasseBrique
     {
         public int currentLevel { get; private set; } = 1;
         public int maxLevel { get; private set; } = 0;
-        public int score { get; private set; } = 0; //replace with nb of days? 
+        public int days { get; private set; } = 0; //replace with nb of days? 
 
         public List<Resource> ListResources; //Class inventory Manager? 
 
         public int[] ResourceTable;
 
+        public bool LevelStarted = false;
 
-        public int lifes { get; private set; } = 3; // replace with current level life - OR with FOOD, but replace also BallOut Method! 
+        public int MaxLifes { get; private set; } = 3;
+        public int currentLifes { get; private set; } = 3; // replace with current level life - OR with FOOD, but replace also BallOut Method! 
+        
 
         public GameController()
         {
             ServicesLocator.Register<GameController>(this);
             maxLevel = CountLevels();
-            ResourceTable = new int[5] { 0, 0, 0, 0, 0 }; 
             ListResources = new List<Resource>();
         }
 
@@ -34,9 +36,10 @@ namespace CasseBrique
         {
             currentLevel = 1;
             ListResources.Clear();
-            lifes = 3;
-            ResourceTable = new int[5] { 0, 0, 0, 0, 0 };  // ATTENTION, utiliser resourceTable[0] pour acceder au premier item de la liste
-            score = 0;
+            MaxLifes = 3; 
+            currentLifes = MaxLifes;
+            days = 0;
+            LevelStarted = false;
         }
 
         public void MoveToNextLevel()
@@ -44,13 +47,15 @@ namespace CasseBrique
             if (currentLevel < maxLevel)
             {
                 currentLevel++;
-            }
+                LevelStarted = false;
+                currentLifes =MaxLifes;
+                            }
             // add game completion condition
         }
 
         public void BallOut()
         {
-            lifes--;
+            currentLifes--;
             // add change Scene (retour au village) if currentLevelLifes <= 0
         }
 
@@ -58,12 +63,12 @@ namespace CasseBrique
         {
             if (ResourceData.Data.ContainsKey(pResourceType))
 
-            {
-                Resource resource = new Resource(ResourceData.Data[pResourceType]);
-                resource.Quantity = pQuantity;
-                ListResources.Add(resource); // Liste ou Tableau??? 
-
-            }
+            { for (int i=1;i<=pQuantity;i++)
+                {
+                    Resource resource = new Resource(ResourceData.Data[pResourceType]);
+                    ListResources.Add(resource);  
+                }
+                            }
         }
 
         public void LooseResource(String pResourceType,int pQuantity)
@@ -81,7 +86,17 @@ namespace CasseBrique
 
         public List<Resource>GetResourceList() { return ListResources; }
 
-        // need a remove resource
+        public int GetResourceQty(string type)
+        {
+            int count = 0;
+            foreach (Resource resource in ListResources)
+            { 
+                if (resource.Type == type)
+                    count= count+1;
+            }
+            return count;
+        }
+       
 
 
         public int[,] GetBricksLayout()

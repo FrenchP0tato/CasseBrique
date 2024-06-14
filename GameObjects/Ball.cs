@@ -53,7 +53,6 @@ namespace CasseBrique.GameObjects
             {
                 _direction=direction;
                 isShot = true;
-                Console.WriteLine("i shoot");
             }
 
         }
@@ -109,7 +108,7 @@ namespace CasseBrique.GameObjects
             if (position.Y > _bounds.Bottom + offset.Y)
             {
                 isShot = false;
-                // add looselife
+                ServicesLocator.Get<GameController>().BallOut();
             }
         }
 

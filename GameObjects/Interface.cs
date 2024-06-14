@@ -1,5 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Versioning;
+using System.Security.AccessControl;
 
 
 
@@ -10,6 +14,7 @@ namespace CasseBrique.GameObjects
     {
         Rectangle bounds;
         private SpriteFont font;
+        private List<Resource> currentResources;
 
         public Interface(Scene pRoot) : base(pRoot)
         {
@@ -33,10 +38,15 @@ namespace CasseBrique.GameObjects
             texture.SetData(new[] { Color.Black } );
 
             sb.Draw(texture, bounds,Color.White);
+            currentResources=gc.GetResourceList();
 
-           
-            sb.DrawString(font, $"Nombre de vies restantes: {gc.lifes} -- Niveau actuel: {gc.currentLevel} -- Resources: Bois {gc.ResourceTable[1]}", new Vector2(0,50), Color.AliceBlue);
+            foreach(KeyValuePair<string, Resource> entry in ResourceData.Data )
+            {
+                sb.DrawString(font, $"{entry.Key}: {gc.GetResourceQty(entry.Key)}", new Vector2(entry.Value.InventorySlot * 100, 0), Color.AliceBlue);
+            }
 
+            sb.DrawString(font, $"Nombre de vies restantes: {gc.currentLifes} -- Niveau actuel: {gc.currentLevel}", new Vector2(0,50), Color.AliceBlue);
+            sb.DrawString(font, $"Started?{gc.LevelStarted}", new Vector2(300, 50), Color.AliceBlue);
         }
 
       

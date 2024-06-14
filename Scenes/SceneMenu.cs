@@ -10,7 +10,7 @@ namespace CasseBrique
 {
     public class SceneMenu : Scene
     {
-       
+
         public override void Load()
         {
             IScreenService screen = ServicesLocator.Get<IScreenService>();

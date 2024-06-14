@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using CasseBrique.GameObjects;
+using Microsoft.Xna.Framework;
 
 namespace CasseBrique
 {
     public abstract class Scene //peut pas avoir d'instance de Scene uniquement, les classe qui héritent doivent implémenter les methodes abstraites
     {
+
         private List<GameObject>_gameObjects=new List<GameObject>();
 
         public virtual void Load(){ }
