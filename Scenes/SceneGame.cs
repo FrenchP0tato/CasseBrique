@@ -7,8 +7,8 @@ using CasseBrique.Services;
 using Microsoft.Xna.Framework.Media;
 
 
-// To do: Résolu le pb de conserver les briques. Est-ce propre?
-// pb pour coder les changements de scale des sprite: e.g. pour mon paddle
+// Pb: arrive pas à modifier la scale de mon paddle en accord avec sa taille
+// Pb: arrive pas à enlever des objets de la liste de resources
 // Coder les bonus / Scene village
 
 namespace CasseBrique

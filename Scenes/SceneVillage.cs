@@ -29,7 +29,6 @@ namespace CasseBrique
             AddGameObject(new Button("Retry", "Retry previous level", new Vector2(screen.Center.X-100, 35), this));
             AddGameObject(new Button("NextLevel", "Advance your journey!", new Vector2(screen.Center.X + 100, 35), this));
 
-
         }
 
 
