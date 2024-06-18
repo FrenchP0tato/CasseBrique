@@ -1,45 +1,59 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.PortableExecutable;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using CasseBrique.GameObjects;
-using Microsoft.Xna.Framework.Graphics;
+
 
 namespace CasseBrique
 {
     public class GameController
     {
+        //Constantes à modifier également dans le reset:
+        
+        public float PaddleSpeed { get; set; } = 500f;
+        public Vector2 PaddleSizeMult { get; set; } = new Vector2 (3,1);
+
+        public float BallSpeed { get; set; } = 300f;
+        public int MaxLifes { get; set; } = 3;
+        public int FoodConsumption { get; set; } = 2;
+
+        //variables 
         public int currentLevel { get; private set; } = 1;
+        public List<Brique> CurrentBricksList;
         public int maxLevel { get; private set; } = 0;
-        public int days { get; private set; } = 0; //replace with nb of days? 
-
-        public List<Resource> ListResources; //Class inventory Manager? 
-
-        public int[] ResourceTable;
-
+        public int days { get; set; } = 1;
+        public List<Resource> ListResources; 
         public bool LevelStarted = false;
 
-        public int MaxLifes { get; private set; } = 3;
-        public int currentLifes { get; private set; } = 3; // replace with current level life - OR with FOOD, but replace also BallOut Method! 
         
+        public int currentLifes { get; private set; } = 0; // replace with current level life - OR with FOOD, but replace also BallOut Method! 
+
 
         public GameController()
         {
             ServicesLocator.Register<GameController>(this);
             maxLevel = CountLevels();
             ListResources = new List<Resource>();
+            currentLifes = MaxLifes;
         }
 
         public void Reset()
         {
             currentLevel = 1;
             ListResources.Clear();
+            GainResource("Food", 4); 
             MaxLifes = 3; 
             currentLifes = MaxLifes;
-            days = 0;
+            days = 1;
             LevelStarted = false;
+            CurrentBricksList.Clear();
+            PaddleSpeed = 500f;
+            BallSpeed = 500f;
+            PaddleSizeMult= new Vector2(3, 1);
+            FoodConsumption= 2;
         }
 
         public void MoveToNextLevel()
@@ -49,7 +63,25 @@ namespace CasseBrique
                 currentLevel++;
                 LevelStarted = false;
                 currentLifes =MaxLifes;
-                            }
+            }
+            // add game completion condition
+        }
+
+        public void GameOver()
+        { 
+        // add number of days survived,create GameOverScene
+        }
+
+        public bool MoveToNextDay()
+        {
+            if (GetResourceQty("Food") >= FoodConsumption)
+            {
+                //LooseResource("Food", FoodConsumption);
+                LooseResourceQty("Food",FoodConsumption);
+                days++;
+                return true;
+            }
+            else return false;
             // add game completion condition
         }
 
@@ -59,7 +91,7 @@ namespace CasseBrique
             // add change Scene (retour au village) if currentLevelLifes <= 0
         }
 
-        public void GainResource(String pResourceType,int pQuantity)
+        public void GainResource(string pResourceType,int pQuantity)
         {
             if (ResourceData.Data.ContainsKey(pResourceType))
 
@@ -68,23 +100,35 @@ namespace CasseBrique
                     Resource resource = new Resource(ResourceData.Data[pResourceType]);
                     ListResources.Add(resource);  
                 }
-                            }
+            }
         }
-
-        public void LooseResource(String pResourceType,int pQuantity)
+/*
+        public void LooseResource(string pResourceType,int pQuantity)
         {
-            foreach (Resource resource in ListResources)
-                if (resource.Type == pResourceType)
-                { 
-                for (int i = 1; i <= pQuantity; i++) 
-                    { 
-                        ListResources.Remove(resource);
-                    }
+            for (int i = 1; i <= pQuantity; i++)
+            {
+                var resourceToRemove=ListResources.Where(r=>r.Type==pResourceType);
+                ListResources.Remove(resourceToRemove);
+            }
+        }*/
+
+
+        public void LooseResourceQty(string type, int pQuantity)
+        { 
+            int count= 0;
+                foreach (Resource resource in ListResources)
+            { 
+             if (count > pQuantity) return;
+             if (resource.Type == type)
+                {
+                    ListResources.Remove(resource);
+                    count++;
                 }
+            }
         }
 
 
-        public List<Resource>GetResourceList() { return ListResources; }
+        //public List<Resource>GetResourceList() { return ListResources; }
 
         public int GetResourceQty(string type)
         {

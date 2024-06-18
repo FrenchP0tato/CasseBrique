@@ -11,7 +11,7 @@ namespace CasseBrique.GameObjects
     public class Ball : SpriteGameObject
     {
         private Vector2 _direction;
-        private float _speed = 400f;
+        private float _speed;
         private Vector2 _velocity;
         private Rectangle _bounds;
         private float radius => texture.Width * 0.5f;
@@ -24,14 +24,6 @@ namespace CasseBrique.GameObjects
             { return _damage; }
         }
 
-        public Rectangle Collider
-        {
-            get
-            {
-                return new Rectangle((int)(position.X - offset.X), (int)(position.Y - offset.Y), texture.Width, texture.Height);
-            }
-
-        }
 
 
         public Ball(Rectangle bounds, Scene root) : base(root)
@@ -44,7 +36,18 @@ namespace CasseBrique.GameObjects
             offset = size * 0.5f;
             tag = "Ball";
             _damage = 1;
+            _speed = ServicesLocator.Get<GameController>().BallSpeed;
             
+        }
+
+
+        public Rectangle Collider
+        {
+            get
+            {
+                return new Rectangle((int)(position.X - offset.X), (int)(position.Y - offset.Y), texture.Width, texture.Height);
+            }
+
         }
 
         public void Shoot(Vector2 direction)

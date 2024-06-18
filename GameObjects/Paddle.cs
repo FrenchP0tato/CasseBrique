@@ -12,14 +12,16 @@ namespace CasseBrique.GameObjects
     public class Paddle : SpriteGameObject
     {
         private Rectangle _bounds;
-        private float _speed = 800f;
+        private float _speed;
         private Vector2 _targetPosition;
-        
+        GameController gc = ServicesLocator.Get<GameController>();
+
         public Paddle(Rectangle pBounds, Scene pRoot) : base(pRoot)
         {
             texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("Paddle");
             _bounds = pBounds;
-            size.X = texture.Width;
+            size.X = texture.Width; //*gc.PaddleSizeMult.X;
+            //scale.X = gc.PaddleSizeMult.X; // ???? 
             size.Y = texture.Height;
             offset = size * 0.5f;
             _targetPosition = new Vector2(pBounds.Center.X, pBounds.Bottom - texture.Height * 0.5f);
@@ -27,12 +29,8 @@ namespace CasseBrique.GameObjects
             tag = "Paddle";
             color = Color.SaddleBrown;
             impactSound = ServicesLocator.Get<IAssetsService>().Get<SoundEffect>("ImpactPaddle");
-        }
-
-        public void Move(Vector2 pDirection, float dt)
-        {
-            Vector2 velocity = pDirection * _speed;
-            position += velocity * dt;
+            _speed=gc.PaddleSpeed;
+            
         }
 
         public override void Update(float dt)
@@ -50,7 +48,7 @@ namespace CasseBrique.GameObjects
 
         public override void OnCollide(SpriteGameObject other)
         {
-            impactSound.Play(); // deplacer dans le Sprite Game object?
+            impactSound.Play(Main.MasterVolume, 0f, 0f);
             base.OnCollide(other);
         }
     }

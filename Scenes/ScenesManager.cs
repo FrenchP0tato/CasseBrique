@@ -7,21 +7,19 @@ namespace CasseBrique
 {
     public interface IScenesManager
     {
-        void Load<T>() where T : Scene, new();
+        void ChangeScene<T>() where T : Scene, new();
     }
 
-    
     public sealed class ScenesManager : IScenesManager
     {
         private Scene _currentScene;
 
         public ScenesManager() 
         {
+            ServicesLocator.Register<IScenesManager>(this);
+        }
 
-                        ServicesLocator.Register<IScenesManager>(this);
-                }
-
-        public void Load<T>() where T : Scene, new()
+        public void ChangeScene<T>() where T : Scene, new()
         {
             var type=typeof(T);
             if (_currentScene != null) _currentScene.Unload();

@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using System.Data.Common;
 
 
@@ -24,6 +26,7 @@ namespace CasseBrique.GameObjects
             life = 1;
             tag = "Brique"; 
             type = Type;
+            
 
             if (type == "Stone")
             {
@@ -71,7 +74,7 @@ namespace CasseBrique.GameObjects
         {
             life -= pDamage;
             texture = damagedTexture;
-            impactSound.Play();
+            impactSound.Play(Main.MasterVolume,0f,0f);
 
             if (life <= 0)
             {

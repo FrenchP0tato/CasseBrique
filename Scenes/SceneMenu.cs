@@ -15,20 +15,20 @@ namespace CasseBrique
         {
             IScreenService screen = ServicesLocator.Get<IScreenService>();
        
-            AddGameObject(new Button("Game", "Start Game", new Vector2(screen.Center.X, screen.Center.Y),this));
-            AddGameObject(new Button("Village", "See your Raft", new Vector2(screen.Center.X, screen.Center.Y+60), this));
-
+            AddGameObject(new Button("Game", "Continue Game", new Vector2(screen.Center.X, screen.Center.Y-40),this));
+            AddGameObject(new Button("Village", "See your Raft", new Vector2(screen.Center.X, screen.Center.Y+40), this));
+            AddGameObject(new Button("New Game", "Restart", new Vector2(screen.Center.X, screen.Center.Y + 100), this));
         }
 
         public override void Update(float dt)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
-                ServicesLocator.Get<IScenesManager>().Load<SceneGame>();
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.V))
-                ServicesLocator.Get<IScenesManager>().Load<SceneVillage>();
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
+            if (Keyboard.GetState().IsKeyDown(Keys.V))
+                ServicesLocator.Get<IScenesManager>().ChangeScene<SceneVillage>();
             base.Update(dt);
         }
-        // Ancienement dans le draw: sb.DrawString(font, "Scene Menu, Appuyez sur V pour aller au village, et Entrer pour le jeu", Vector2.One, Color.AliceBlue);
+       
 
 
     }

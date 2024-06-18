@@ -15,7 +15,7 @@ namespace CasseBrique.GameObjects
         private Texture2D highlightTexture;
         private Texture2D basicTexture;
         private String target;
-        
+        private GameController gc = ServicesLocator.Get<GameController>();
 
 
         public Button(String pTarget, String pText, Vector2 pPosition, Scene pRoot) : base(pRoot)
@@ -36,7 +36,6 @@ namespace CasseBrique.GameObjects
 
         public override void Update(float dt)
         {
-            
             MouseState NewMouseState = Mouse.GetState();
             if (ServicesLocator.Get<MouseService>().CheckMouseClicks(oldMouseState, NewMouseState) == true)
             {
@@ -48,17 +47,32 @@ namespace CasseBrique.GameObjects
 
                     if (this.target == "Game")  // pas réussi à le faire avec un Paramètre directement dans la methode load
                    {
-                        ServicesLocator.Get<IScenesManager>().Load<SceneGame>();
+                        ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
                     }
                     if (this.target == "Menu")
                     {
-                        ServicesLocator.Get<IScenesManager>().Load<SceneMenu>();
+                        ServicesLocator.Get<IScenesManager>().ChangeScene<SceneMenu>();
                     }
                     if (this.target == "Village")
                     {
-                        ServicesLocator.Get<IScenesManager>().Load<SceneVillage>();
+                        ServicesLocator.Get<IScenesManager>().ChangeScene<SceneVillage>();
                     }
-
+                    if (this.target== "New Game")
+                    {
+                        gc.Reset();
+                        ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
+                    }
+                    if (this.target == "Retry")
+                    {
+                        if (gc.MoveToNextDay()) ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
+                        else gc.GameOver();
+                    }
+                    if (this.target == "NextLevel")
+                    {
+                        gc.MoveToNextLevel();
+                        gc.MoveToNextDay();
+                        ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
+                    }
                 }
                 
             }
@@ -69,10 +83,19 @@ namespace CasseBrique.GameObjects
         {
             
             base.Draw(sb);
+            Vector2 offset = TextOffset(font, text, position);
         
-            Vector2 TextOffset = new Vector2 (text.Length*3f, offset.Y*.5f);
-            sb.DrawString(font, text, position-TextOffset, Color.Black);
+            sb.DrawString(font, text, offset, Color.Black);
 
         }
+
+        private Vector2 TextOffset(SpriteFont font, string text, Vector2 origin)
+        {
+            Vector2 textSize = font.MeasureString(text);
+            Vector2 offset = new Vector2(origin.X - textSize.X / 2, origin.Y-textSize.Y/2);
+
+            return offset;
+        }
+
     }
 }

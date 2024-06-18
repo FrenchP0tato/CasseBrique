@@ -17,14 +17,7 @@ namespace CasseBrique.GameObjects
         public string tag;
         public SpriteEffects effect;
         public SoundEffect impactSound;
-
-        public Rectangle collider
-        { get
-            {
-                return new Rectangle((int)(position.X - offset.X), (int)(position.Y - offset.Y), texture.Width, texture.Height);
-            }
-
-        }
+       
 
         public SpriteGameObject(Scene pRoot) : base(true, pRoot)
         {
@@ -35,7 +28,6 @@ namespace CasseBrique.GameObjects
             offset=Vector2.Zero;
             tag = "Sprite";
             effect = SpriteEffects.None;
-            
         }
 
         public SpriteGameObject(Vector2 pPosition, Scene pRoot) : base(true, pRoot)
@@ -45,12 +37,22 @@ namespace CasseBrique.GameObjects
             rotation = 0f;
             scale = Vector2.One;
             offset = Vector2.Zero;
+        }
+
+
+
+        public Rectangle collider
+        {
+            get
+            {
+                return new Rectangle((int)(position.X - offset.X), (int)(position.Y - offset.Y), (int)(size.X), (int)size.Y);
+
+            }
 
         }
 
         public override void Draw(SpriteBatch sb)
         {
-            //if (texture == null) return;
             if (texture==null) { texture = new Texture2D(sb.GraphicsDevice, 1, 1); }
             sb.Draw(texture, position, null, color, rotation, offset, scale, effect, 0);
         }

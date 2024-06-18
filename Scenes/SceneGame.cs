@@ -5,9 +5,10 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using CasseBrique.Services;
 using Microsoft.Xna.Framework.Media;
-using System;
 
-// To do: regler pb de pas 'sauvegarder' les niveaux en cours. -> Loader qqchose à la prochaine scene, mais quoi? Vu que les briques ont été générés par un layout, et que là il me reste qu'une liste? 
+
+// To do: Résolu le pb de conserver les briques. Est-ce propre?
+// pb pour coder les changements de scale des sprite: e.g. pour mon paddle
 // Coder les bonus / Scene village
 
 namespace CasseBrique
@@ -16,46 +17,71 @@ namespace CasseBrique
     {
         bool isPaused = false;
         public List<Brique> currentBricksList;
-      
+        public Paddle myPaddle;
+        public Ball myBall;
+        GameController gc = ServicesLocator.Get<GameController>();
 
-        public override void Load() //peut modifier pour passer des paramètres d'une scène à l'autre! Va devoir modifier pour l'etat du niveau...
+
+        public override void Load() 
         {
-            IScreenService screen =ServicesLocator.Get<IScreenService>();
-            var gc = ServicesLocator.Get<GameController>();
-
+            IScreenService screen = ServicesLocator.Get<IScreenService>();
+            
+       
             Rectangle bounds = new Rectangle(0, 70, 1280, 650);
 
-            string Level = ServicesLocator.Get<GameController>().GetLevel();
+            string Level = gc.GetLevel();
 
-            // if (gc.LevelStarted) return;
-
-            Song GameSong=ServicesLocator.Get<IAssetsService>().Get<Song>("CoolSong");
+            Song GameSong = ServicesLocator.Get<IAssetsService>().Get<Song>("CoolSong");
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(GameSong);
-            MediaPlayer.Volume = 0.1f;
+            MediaPlayer.Volume = 0.05f;
+
+            myPaddle = new Paddle(bounds, this);
+            myBall = new Ball(bounds, this);
+            currentBricksList = new List<Brique>();
 
             AddGameObject(new Background("LevelBackground", ServicesLocator.Get<IAssetsService>().Get<Texture2D>(Level), this));
             AddGameObject(new Interface(this));
-            AddGameObject(new Ball(bounds,this)); 
-            AddGameObject(new Paddle(bounds,this));
+            AddGameObject(myPaddle);
+            AddGameObject(myBall);
 
-            AddNewBricks(bounds);
-            gc.LevelStarted = true;
+            if (gc.LevelStarted)
+            {
+                currentBricksList = gc.CurrentBricksList;
+                foreach (Brique b in currentBricksList)
+                {
+                    AddGameObject(b);
+                }
+                    
+            }
+            else
+            {
+                AddNewBricks(bounds);
+                gc.LevelStarted = true;
+                if (gc.currentLevel==1) gc.GainResource("Food", 4);
+            }
+
+            
+
+            // ici peut ajouter logiques pour modifier les valeurs de Mypaddle et MyBall!! 
         }
 
         public override void Unload()
         {
+            var gc = ServicesLocator.Get<GameController>();
+            gc.CurrentBricksList= GetGameObjects<Brique>();
             base.Unload();
         }
 
         private void AddNewBricks(Rectangle bounds)
         {
-            var brickLayout = ServicesLocator.Get<GameController>().GetBricksLayout();
+            
+            var brickLayout = gc.GetBricksLayout();
             var brickTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrick");
             int columns = brickLayout.GetLength(0); 
             int rows = brickLayout.GetLength(1);
 
-            int spaceBetweenBricks = 5;
+            int spaceBetweenBricks = 3;
             int verticaloffset = 10;
 
             float totalWidth =(columns)*(brickTexture.Width+spaceBetweenBricks)-spaceBetweenBricks;
@@ -92,9 +118,8 @@ namespace CasseBrique
         public override void Update(float dt)
          {
             var bricks = GetGameObjects<Brique>();
-            var gc = ServicesLocator.Get<GameController>();
             var sc = ServicesLocator.Get<IScenesManager>();
-
+            GameController gc = ServicesLocator.Get<GameController>();
 
             KeyboardService.GetState();
 
@@ -108,18 +133,18 @@ namespace CasseBrique
             if (KeyboardService.HasBeenPressed(Keys.Enter))
             {
                 gc.MoveToNextLevel();
-                sc.Load<SceneGame>();
+                sc.ChangeScene<SceneGame>();
             }
 
             if (KeyboardService.HasBeenPressed(Keys.M))
             {
-                sc.Load<SceneMenu>(); // must find a way that this doesn't unload the scene! 
+                sc.ChangeScene<SceneMenu>(); // must find a way that this doesn't unload the scene! 
             }
             
             if (bricks.Count == 0)
             {
                 gc.MoveToNextLevel();
-                sc.Load<SceneGame>();
+                sc.ChangeScene<SceneGame>();
             }
              base.Update(dt);
             }

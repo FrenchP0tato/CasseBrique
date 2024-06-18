@@ -22,6 +22,7 @@ namespace CasseBrique
         private AssetsService _assetsServices;
         private ScreenService _screenService; 
         private ScenesManager _scenesManager;
+        public static float MasterVolume { get; set; }
 
         public Main()
         {
@@ -41,6 +42,7 @@ namespace CasseBrique
             ResourceData.PopulateData();
 
             _screenService.SetSize(1280, 720);
+            MasterVolume = 0.05f;
             base.Initialize();
         }
 
@@ -75,7 +77,7 @@ namespace CasseBrique
                 {
                 _assetsServices.Load<Texture2D>($"Level{i}");
             }
-            _scenesManager.Load<SceneGame>();
+            _scenesManager.ChangeScene<SceneGame>();
 
         }
 
