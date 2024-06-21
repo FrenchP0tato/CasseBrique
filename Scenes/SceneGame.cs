@@ -5,11 +5,21 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using CasseBrique.Services;
 using Microsoft.Xna.Framework.Media;
+using CasseBrique.Scenes;
 
+/* pb to fix:
+- Improve button texture (transparent background)
+- Change Font
+- test bricks.clear more
 
-// Pb: arrive pas à modifier la scale de mon paddle en accord avec sa taille
-// Pb: arrive pas à enlever des objets de la liste de resources
-// Coder les bonus / Scene village
+improvements:
+- Make Button texture flexible like Pad
+- add level specific musics
+- More varied Bonus, incl. Ball Directional choice when shooting(+), extra ball (++)
+- more levels
+- 3 colors for ball and pads 
+ */
+
 
 namespace CasseBrique
 {
@@ -26,7 +36,6 @@ namespace CasseBrique
         {
             IScreenService screen = ServicesLocator.Get<IScreenService>();
             
-       
             Rectangle bounds = new Rectangle(0, 70, 1280, 650);
 
             string Level = gc.GetLevel();
@@ -44,6 +53,7 @@ namespace CasseBrique
             AddGameObject(new Interface(this));
             AddGameObject(myPaddle);
             AddGameObject(myBall);
+            gc.GameStarted=true;
 
             if (gc.LevelStarted)
             {
@@ -52,30 +62,27 @@ namespace CasseBrique
                 {
                     AddGameObject(b);
                 }
-                    
             }
             else
             {
                 AddNewBricks(bounds);
                 gc.LevelStarted = true;
                 if (gc.currentLevel==1) gc.GainResource("Food", 4);
+                // for testing only, to REMOVE before release
+                if (gc.currentLevel == 1) gc.GainResource("Wood", 20);
+                if (gc.currentLevel == 1) gc.GainResource("Gold", 20);
+                if (gc.currentLevel == 1) gc.GainResource("Science", 20);
             }
-
-            
-
-            // ici peut ajouter logiques pour modifier les valeurs de Mypaddle et MyBall!! 
         }
 
         public override void Unload()
         {
-            var gc = ServicesLocator.Get<GameController>();
             gc.CurrentBricksList= GetGameObjects<Brique>();
             base.Unload();
         }
 
         private void AddNewBricks(Rectangle bounds)
         {
-            
             var brickLayout = gc.GetBricksLayout();
             var brickTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrick");
             int columns = brickLayout.GetLength(0); 
@@ -96,7 +103,6 @@ namespace CasseBrique
                 {
                     if (brickLayout[column, row] > 0)
                     {
-
                         float x = bounds.X + offsetX + column * (brickTexture.Width + spaceBetweenBricks);
                         float y = bounds.Y + verticaloffset + row * (brickTexture.Height + spaceBetweenBricks);
                         
@@ -123,6 +129,19 @@ namespace CasseBrique
 
             KeyboardService.GetState();
 
+            // for testing only - to delete before release
+            if (KeyboardService.HasBeenPressed(Keys.Enter))
+            {
+                gc.MoveToNextLevel();
+                sc.ChangeScene<SceneGame>();
+            }
+            if (KeyboardService.HasBeenPressed(Keys.Back))
+            {
+                bricks.Clear();
+            }
+
+
+
             if (KeyboardService.HasBeenPressed(Keys.P))
             {
                 isPaused=!isPaused;
@@ -130,22 +149,19 @@ namespace CasseBrique
 
             if (isPaused) return;
             
-            if (KeyboardService.HasBeenPressed(Keys.Enter))
-            {
-                gc.MoveToNextLevel();
-                sc.ChangeScene<SceneGame>();
-            }
+            
 
-            if (KeyboardService.HasBeenPressed(Keys.M))
+            if (KeyboardService.HasBeenPressed(Keys.M)) 
             {
-                sc.ChangeScene<SceneMenu>(); // must find a way that this doesn't unload the scene! 
+                if (myBall.isShot) return;
+                sc.ChangeScene<SceneMenu>(); 
             }
             
             if (bricks.Count == 0)
-            {
-                gc.MoveToNextLevel();
-                sc.ChangeScene<SceneGame>();
+            { if (gc.currentLevel == gc.maxLevel) sc.ChangeScene<SceneVictory>();
+               else sc.ChangeScene<SceneVillage>();
             }
+
              base.Update(dt);
             }
 

@@ -35,18 +35,20 @@ namespace CasseBrique.GameObjects
 
             sb.Draw(texture, bounds,Color.White);
             currentResources = gc.ListResources;
-            //currentResources=gc.GetResourceList();
-
-            DrawCenteredText(font,"Resources en reserve", new Vector2(900, 10), sb);
+            
+            DrawCenteredText(font,"Resources in storage", new Vector2(900, 10), sb);
 
             foreach (KeyValuePair<string, Resource> entry in ResourceData.Data )
             {
-                sb.DrawString(font, $"{entry.Key}: {gc.GetResourceQty(entry.Key)}", new Vector2(700+entry.Value.InventorySlot * 100, 40), Color.AliceBlue);
+                sb.DrawString(font, $"{entry.Key}: {gc.GetResourceQty(entry.Key)}", new Vector2(680+entry.Value.InventorySlot * 100, 40), Color.AliceBlue);
             }
             
-            sb.DrawString(font, $"Nombre de vies restantes: {gc.currentLifes}", new Vector2(20,10), Color.AliceBlue);
-            DrawCenteredText(font,$"Niveau:{gc.currentLevel}", new Vector2(screen.Center.X, 20), sb);
-            DrawCenteredText(font, $"Jour:{gc.days}", new Vector2(screen.Center.X, 35), sb);
+       
+            DrawCenteredText(font,$"Level:{gc.currentLevel}", new Vector2(screen.Center.X, 20), sb);
+            DrawCenteredText(font, $"Day:{gc.days}", new Vector2(screen.Center.X, 35), sb);
+
+           
+            sb.DrawString(font, $"Remaining balls: {gc.currentLifes}", new Vector2(20, 10), Color.AliceBlue);
 
         }
 

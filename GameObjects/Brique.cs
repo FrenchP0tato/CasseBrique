@@ -23,7 +23,7 @@ namespace CasseBrique.GameObjects
             damagedTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("GreyBrickDamaged");
             size.X = texture.Width;
             size.Y = texture.Height;
-            life = 1;
+            life = 0;
             tag = "Brique"; 
             type = Type;
             
@@ -36,7 +36,7 @@ namespace CasseBrique.GameObjects
             }
             if (type == "Wood")
             {
-                life = 2;
+                life = 1;
                 color = Color.SaddleBrown;
                 impactSound = ServicesLocator.Get<IAssetsService>().Get<SoundEffect>("ImpactWood");
             }
@@ -48,10 +48,10 @@ namespace CasseBrique.GameObjects
             } 
             if (type == "Gold")
             {
-                life = 1;
+                life = 2;
                 color = Color.Yellow;
                 impactSound = ServicesLocator.Get<IAssetsService>().Get<SoundEffect>("ImpactGold");
-                NbResource = 5;
+                NbResource = 2;
             } 
             if (type == "Science") 
             {
@@ -78,7 +78,7 @@ namespace CasseBrique.GameObjects
 
             if (life <= 0)
             {
-                DropResource(type, NbResource); // add animation for resource drop
+                DropResource(type, NbResource);
                 enable=false;
                 isFree = true; }
         }

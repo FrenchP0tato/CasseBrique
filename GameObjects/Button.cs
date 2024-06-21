@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Threading;
 
@@ -8,14 +9,14 @@ namespace CasseBrique.GameObjects
 {
     internal class Button : SpriteGameObject
     {
-        MouseState oldMouseState;
-        private SpriteFont font;
-        private bool checkClick = false;
-        private string text;
-        private Texture2D highlightTexture;
-        private Texture2D basicTexture;
-        private String target;
-        private GameController gc = ServicesLocator.Get<GameController>();
+        protected MouseState oldMouseState;
+        protected SpriteFont font;
+        protected bool checkClick = false;
+        protected string text;
+        protected Texture2D highlightTexture;
+        protected Texture2D basicTexture;
+        protected String target;
+        protected GameController gc = ServicesLocator.Get<GameController>();
 
 
         public Button(String pTarget, String pText, Vector2 pPosition, Scene pRoot) : base(pRoot)
@@ -24,14 +25,16 @@ namespace CasseBrique.GameObjects
             text = pText;
             target = pTarget;
             basicTexture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("buttonDefault");
-            texture=basicTexture;
+            
             highlightTexture= ServicesLocator.Get<IAssetsService>().Get<Texture2D>("buttonSelected");
+            texture = highlightTexture;
             position.X = pPosition.X;
             position.Y = pPosition.Y;
             size.X = texture.Width;
             size.Y = texture.Height;
             offset = size * 0.5f;
-                       
+
+            if (this.target == "null") { texture = basicTexture; }
         }
 
         public override void Update(float dt)
@@ -42,11 +45,8 @@ namespace CasseBrique.GameObjects
                 checkClick = ServicesLocator.Get<MouseService>().CheckObjectClick(NewMouseState, position, offset);
                 if (checkClick)
                 {
-                    
-                    isFree = true;
-
-                    if (this.target == "Game")  // pas réussi à le faire avec un Paramètre directement dans la methode load
-                   {
+                    if (this.target == "Game")
+                    {
                         ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
                     }
                     if (this.target == "Menu")
@@ -59,19 +59,39 @@ namespace CasseBrique.GameObjects
                     }
                     if (this.target== "New Game")
                     {
-                        gc.Reset();
+                        if (gc.GameStarted) gc.Reset();
                         ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
                     }
                     if (this.target == "Retry")
                     {
-                        if (gc.MoveToNextDay()) ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
-                        else gc.GameOver();
+                        if  (gc.MoveToNextDay()) 
+                        {
+                            gc.currentLifes = gc.MaxLifes;
+                            ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>(); 
+                        }
+                    }
+                    if (this.target == "Continue")
+                    {
+                            ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
                     }
                     if (this.target == "NextLevel")
                     {
-                        gc.MoveToNextLevel();
-                        gc.MoveToNextDay();
-                        ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
+                        if (gc.MoveToNextDay())
+                        { gc.MoveToNextLevel();
+                            ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGame>();
+                        }
+                 
+                    }
+                    if (this.target == "VolumeUp")
+                    {
+                        MediaPlayer.Volume = MediaPlayer.Volume + 0.10f;
+                        Main.MasterVolume = Main.MasterVolume + 0.10f;
+
+                    }
+                    if (this.target == "VolumeDown")
+                    {
+                        MediaPlayer.Volume = MediaPlayer.Volume - 0.10f;
+                        Main.MasterVolume = Main.MasterVolume - 0.10f;
                     }
                 }
                 
@@ -89,7 +109,7 @@ namespace CasseBrique.GameObjects
 
         }
 
-        private Vector2 TextOffset(SpriteFont font, string text, Vector2 origin)
+        protected Vector2 TextOffset(SpriteFont font, string text, Vector2 origin)
         {
             Vector2 textSize = font.MeasureString(text);
             Vector2 offset = new Vector2(origin.X - textSize.X / 2, origin.Y-textSize.Y/2);

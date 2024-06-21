@@ -1,10 +1,11 @@
 ﻿
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+
 using System.Numerics;
-using System.Runtime.CompilerServices;
+
 using CasseBrique.GameObjects;
+using CasseBrique.Scenes;
 
 
 namespace CasseBrique
@@ -14,9 +15,12 @@ namespace CasseBrique
         //Constantes à modifier également dans le reset:
         
         public float PaddleSpeed { get; set; } = 500f;
-        public Vector2 PaddleSizeMult { get; set; } = new Vector2 (3,1);
+        public int PaddleSize { get; set; } = 50;
 
         public float BallSpeed { get; set; } = 300f;
+
+        public int BallDamage { get; set; } = 1;
+
         public int MaxLifes { get; set; } = 3;
         public int FoodConsumption { get; set; } = 2;
 
@@ -27,9 +31,10 @@ namespace CasseBrique
         public int days { get; set; } = 1;
         public List<Resource> ListResources; 
         public bool LevelStarted = false;
+        public bool GameStarted = false;
 
-        
-        public int currentLifes { get; private set; } = 0; // replace with current level life - OR with FOOD, but replace also BallOut Method! 
+
+        public int currentLifes { get; set; } = 0; 
 
 
         public GameController()
@@ -51,9 +56,11 @@ namespace CasseBrique
             LevelStarted = false;
             CurrentBricksList.Clear();
             PaddleSpeed = 500f;
-            BallSpeed = 500f;
-            PaddleSizeMult= new Vector2(3, 1);
+            BallSpeed = 300f;
+            PaddleSize = 50;
             FoodConsumption= 2;
+            BallDamage = 1;
+            GameStarted = false;
         }
 
         public void MoveToNextLevel()
@@ -63,21 +70,22 @@ namespace CasseBrique
                 currentLevel++;
                 LevelStarted = false;
                 currentLifes =MaxLifes;
+                FoodConsumption += 1;
+                BallSpeed += 50;
             }
             // add game completion condition
         }
 
         public void GameOver()
-        { 
-        // add number of days survived,create GameOverScene
+        {
+            ServicesLocator.Get<IScenesManager>().ChangeScene<SceneGameOver>();
         }
 
         public bool MoveToNextDay()
         {
             if (GetResourceQty("Food") >= FoodConsumption)
             {
-                //LooseResource("Food", FoodConsumption);
-                LooseResourceQty("Food",FoodConsumption);
+                LooseResource("Food", FoodConsumption);
                 days++;
                 return true;
             }
@@ -88,7 +96,13 @@ namespace CasseBrique
         public void BallOut()
         {
             currentLifes--;
-            // add change Scene (retour au village) if currentLevelLifes <= 0
+            if (currentLifes == 0)
+            {
+                if (GetResourceQty("Food") < FoodConsumption) GameOver();
+                else               
+                ServicesLocator.Get<IScenesManager>().ChangeScene<SceneVillage>();
+            }
+            
         }
 
         public void GainResource(string pResourceType,int pQuantity)
@@ -102,33 +116,24 @@ namespace CasseBrique
                 }
             }
         }
-/*
+
         public void LooseResource(string pResourceType,int pQuantity)
         {
-            for (int i = 1; i <= pQuantity; i++)
+            var typeOfResource = pResourceType;
+            var amount = pQuantity;
+
+            for (int i=ListResources.Count-1;i>=0;i--)
             {
-                var resourceToRemove=ListResources.Where(r=>r.Type==pResourceType);
-                ListResources.Remove(resourceToRemove);
-            }
-        }*/
-
-
-        public void LooseResourceQty(string type, int pQuantity)
-        { 
-            int count= 0;
-                foreach (Resource resource in ListResources)
-            { 
-             if (count > pQuantity) return;
-             if (resource.Type == type)
+                var item = ListResources[i];
+                if(item.Type==typeOfResource)
                 {
-                    ListResources.Remove(resource);
-                    count++;
+                    ListResources.Remove(item);
+                    amount--;
                 }
+                if (amount <= 0) break;
+
             }
         }
-
-
-        //public List<Resource>GetResourceList() { return ListResources; }
 
         public int GetResourceQty(string type)
         {
@@ -140,6 +145,8 @@ namespace CasseBrique
             }
             return count;
         }
+
+
        
 
 

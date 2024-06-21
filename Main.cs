@@ -7,11 +7,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 
-// Questions pour Nicolas:
-// Comment garder les briques "en cours" quand on accède au Menu?
-// Aime pas devoir tjr envoyer la balle dans la meme direction, rebonds intelligents? Ou juste envoi dans direction choisie? => Bonus?
-// Vu que pas de draw dans mes objets, comment fait un effet - ex le bouton s'illumine avant de disparaitre
-
 
 namespace CasseBrique
 {
@@ -52,11 +47,13 @@ namespace CasseBrique
             
             //Textures
             _assetsServices.Load<Texture2D>("Paddle");
-            _assetsServices.Load<Texture2D>("BallBlue");
+            _assetsServices.Load<Texture2D>("BallGrey");
             _assetsServices.Load<Texture2D>("GreyBrick");
             _assetsServices.Load<Texture2D>("GreyBrickDamaged");
             _assetsServices.Load<Texture2D>("buttonDefault");
             _assetsServices.Load<Texture2D>("buttonSelected");
+            _assetsServices.Load<Texture2D>("GreenButton");
+            _assetsServices.Load<Texture2D>("GreyButton");
 
             //Sons:
             _assetsServices.Load<Song>("CoolSong");
@@ -65,28 +62,27 @@ namespace CasseBrique
             _assetsServices.Load<SoundEffect>("ImpactWood");
             _assetsServices.Load<SoundEffect>("ImpactGrass");
             _assetsServices.Load<SoundEffect>("ImpactGold");
+            _assetsServices.Load<SoundEffect>("plouf");
 
 
             //Autres Assets
             _assetsServices.Load<SpriteFont>("BasicText");
             _assetsServices.Load<Texture2D>("VillageBackground");
 
-
-
             for (int i= 1; i <= ServicesLocator.Get<GameController>().maxLevel; i++)
                 {
                 _assetsServices.Load<Texture2D>($"Level{i}");
             }
-            _scenesManager.ChangeScene<SceneGame>();
+            _scenesManager.ChangeScene<SceneMenu>();
 
         }
 
         protected override void Update(GameTime gameTime)
         {
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds; //"casté" ma variable: forcé un type
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds; 
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();  // pas réussi à bouger ca car exit utilise une class de game
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();  
 
             _scenesManager.Update(dt);
             base.Update(gameTime);
@@ -94,7 +90,7 @@ namespace CasseBrique
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black); //comment la changer dans une scene? -> Trouvé: utiliser SB.GraphicsDevice
+            GraphicsDevice.Clear(Color.Black); 
             
             _spriteBatch.Begin();
             _scenesManager.Draw(_spriteBatch);

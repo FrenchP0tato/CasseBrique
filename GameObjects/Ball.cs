@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -14,10 +15,10 @@ namespace CasseBrique.GameObjects
         private float _speed;
         private Vector2 _velocity;
         private Rectangle _bounds;
-        private float radius => texture.Width * 0.5f;
 
-        private bool isShot = false;
+        public bool isShot = false;
         private int _damage;
+        private SoundEffect ploufSound;
 
         public int Damage
         { get
@@ -28,27 +29,18 @@ namespace CasseBrique.GameObjects
 
         public Ball(Rectangle bounds, Scene root) : base(root)
         {
-            texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("BallBlue");
-            color = Color.Red;
+            texture = ServicesLocator.Get<IAssetsService>().Get<Texture2D>("BallGrey");
+            color = Color.IndianRed;
             _bounds = bounds;
             size.X = texture.Width;
             size.Y = texture.Height;
             offset = size * 0.5f;
             tag = "Ball";
-            _damage = 1;
+            _damage = ServicesLocator.Get<GameController>().BallDamage;
             _speed = ServicesLocator.Get<GameController>().BallSpeed;
-            
+            ploufSound = ServicesLocator.Get<IAssetsService>().Get<SoundEffect>("plouf");
         }
 
-
-        public Rectangle Collider
-        {
-            get
-            {
-                return new Rectangle((int)(position.X - offset.X), (int)(position.Y - offset.Y), texture.Width, texture.Height);
-            }
-
-        }
 
         public void Shoot(Vector2 direction)
         {
@@ -62,6 +54,8 @@ namespace CasseBrique.GameObjects
 
         public override void Update(float dt)
         {
+            if (_damage == 2) color = Color.Red;
+
             if (isShot)
             {
                 Move(dt);
@@ -72,10 +66,10 @@ namespace CasseBrique.GameObjects
             }
             else
             {
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Space))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
                     Shoot(new Vector2(-1, -1));
                 var pad = root.GetGameObjects<Paddle>()[0];
-                position = new Vector2(pad.position.X-offset.X*.5f, pad.position.Y-texture.Height);
+                position = new Vector2(pad.position.X+pad.capSize, pad.position.Y-texture.Height);
             }
         }
 
@@ -112,6 +106,7 @@ namespace CasseBrique.GameObjects
             {
                 isShot = false;
                 ServicesLocator.Get<GameController>().BallOut();
+                ploufSound.Play(Main.MasterVolume, 0f, 0f);
             }
         }
 
@@ -121,19 +116,19 @@ namespace CasseBrique.GameObjects
             foreach (SpriteGameObject obj in objects)
             {
                 if (!obj.enable) continue;
-                if (Collider.Intersects(obj.collider))
+                if (collider.Intersects(obj.collider))
                 {
-                    float depthX = Math.Min(Collider.Right - obj.collider.Left, obj.collider.Right - Collider.Left);
-                    float depthY = Math.Min(Collider.Bottom - obj.collider.Top, obj.collider.Bottom - Collider.Top);
+                    float depthX = Math.Min(collider.Right - obj.collider.Left, obj.collider.Right - collider.Left);
+                    float depthY = Math.Min(collider.Bottom - obj.collider.Top, obj.collider.Bottom - collider.Top);
 
                     if (depthX < depthY)
                     {
-                        if (Collider.Right > obj.collider.Left && Collider.Left < obj.collider.Left)
+                        if (collider.Right > obj.collider.Left && collider.Left < obj.collider.Left)
                         {
                             position.X = obj.collider.Left - offset.X;
                             _direction.X *= -1;
                         }
-                        else if (Collider.Left < obj.collider.Right && Collider.Right > obj.collider.Right)
+                        else if (collider.Left < obj.collider.Right && collider.Right > obj.collider.Right)
                         {
                             position.X = obj.collider.Right + offset.X;
                             _direction.X *= -1;
@@ -141,12 +136,12 @@ namespace CasseBrique.GameObjects
                     }
                     else
                     {
-                        if (Collider.Bottom > obj.collider.Top && Collider.Top < obj.collider.Top)
+                        if (collider.Bottom > obj.collider.Top && collider.Top < obj.collider.Top)
                         {
                             position.Y = obj.collider.Top - offset.Y;
                             _direction.Y *= -1;
                         }
-                        else if (Collider.Top < obj.collider.Bottom && Collider.Bottom > obj.collider.Bottom)
+                        else if (collider.Top < obj.collider.Bottom && collider.Bottom > obj.collider.Bottom)
                         {
                             position.Y = obj.collider.Bottom + offset.Y;
                             _direction.Y *= -1;

@@ -40,12 +40,11 @@ namespace CasseBrique.GameObjects
         }
 
 
-
         public Rectangle collider
         {
             get
             {
-                return new Rectangle((int)(position.X - offset.X), (int)(position.Y - offset.Y), (int)(size.X), (int)size.Y);
+                return new Rectangle((int)(position.X - offset.X), (int)(position.Y - offset.Y), (int)size.X, (int) size.Y);
 
             }
 
