@@ -93,6 +93,11 @@ namespace CasseBrique.GameObjects
                         MediaPlayer.Volume = MediaPlayer.Volume - 0.10f;
                         Main.MasterVolume = Main.MasterVolume - 0.10f;
                     }
+
+                    if (this.target =="Quit")
+                    {
+                        
+                    }
                 }
                 
             }
