@@ -71,7 +71,7 @@ namespace CasseBrique
                 LevelStarted = false;
                 currentLifes =MaxLifes;
                 FoodConsumption += 1;
-                BallSpeed += 50;
+                BallSpeed += 30;
             }
             // add game completion condition
         }

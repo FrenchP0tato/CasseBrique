@@ -40,7 +40,7 @@ namespace CasseBrique.GameObjects
         }
 
 
-        public Rectangle collider
+        public virtual Rectangle collider
         {
             get
             {

@@ -15,7 +15,7 @@ namespace CasseBrique.GameObjects
         private float _speed;
         private Vector2 _targetPosition;
         GameController gc = ServicesLocator.Get<GameController>();
-        public int capSize = 10;
+        public int capSize = 20;
         private Rectangle textureSize;
 
         public Paddle(Rectangle pBounds, Scene pRoot) : base(pRoot)
@@ -49,6 +49,17 @@ namespace CasseBrique.GameObjects
 
             _targetPosition = Vector2.Clamp(_targetPosition, new Vector2(_bounds.Left + offset.X, position.Y), new Vector2(_bounds.Right - offset.X-capSize*2, position.Y));
             position = Vector2.Lerp(position, _targetPosition, 0.15f);
+        }
+
+
+        public override Rectangle collider
+        {
+            get
+            {
+                return new Rectangle((int)(position.X - offset.X), (int)(position.Y - offset.Y), (int)size.X+capSize*2, (int)size.Y);
+
+            }
+
         }
 
         public override void OnCollide(SpriteGameObject other)
