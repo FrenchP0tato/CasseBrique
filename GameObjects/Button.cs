@@ -40,7 +40,7 @@ namespace CasseBrique.GameObjects
         public override void Update(float dt)
         {
             MouseState NewMouseState = Mouse.GetState();
-            if (ServicesLocator.Get<MouseService>().CheckMouseClicks(oldMouseState, NewMouseState) == true)
+            if (ServicesLocator.Get<MouseService>().CheckMouseClicks(oldMouseState, NewMouseState) == true) 
             {
                 checkClick = ServicesLocator.Get<MouseService>().CheckObjectClick(NewMouseState, position, offset);
                 if (checkClick)

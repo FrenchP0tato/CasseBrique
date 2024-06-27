@@ -2,15 +2,10 @@
 
 namespace CasseBrique.Services
 {
-    public class KeyboardService
+    internal class KeyboardService
     {
         static KeyboardState currentKeyState;
         static KeyboardState previousKeyState;
-
-        public KeyboardService()
-        {
-            ServicesLocator.Register<KeyboardService>(this);
-        }
 
         public static KeyboardState GetState()
         {

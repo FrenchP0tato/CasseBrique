@@ -27,10 +27,10 @@ namespace CasseBrique
     {
         bool isPaused = false;
         public List<Brique> currentBricksList;
-        public Paddle myPaddle;
+        private Paddle myPaddle;
         public Ball myBall;
         GameController gc = ServicesLocator.Get<GameController>();
-
+        IScenesManager sc = ServicesLocator.Get<IScenesManager>();
 
         public override void Load() 
         {
@@ -74,6 +74,8 @@ namespace CasseBrique
                 if (gc.currentLevel == 1) gc.GainResource("Science", 20);
             }
         }
+
+
 
         public override void Unload()
         {
@@ -124,9 +126,8 @@ namespace CasseBrique
         public override void Update(float dt)
          {
             var bricks = GetGameObjects<Brique>();
-            var sc = ServicesLocator.Get<IScenesManager>();
-            GameController gc = ServicesLocator.Get<GameController>();
-
+            
+            
             KeyboardService.GetState();
 
             // for testing only - to delete before release

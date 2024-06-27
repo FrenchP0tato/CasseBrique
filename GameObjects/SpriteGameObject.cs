@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CasseBrique.GameObjects
 {
-    public class SpriteGameObject : GameObject
+    public abstract class SpriteGameObject : GameObject
     {
         public Texture2D texture;
         public Vector2 position;

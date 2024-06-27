@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace CasseBrique.GameObjects
 {
-    public class Paddle : SpriteGameObject
+    internal class Paddle : SpriteGameObject
     {
         private Rectangle _bounds;
         private float _speed;

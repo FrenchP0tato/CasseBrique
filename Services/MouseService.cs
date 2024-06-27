@@ -5,11 +5,12 @@ using System;
 
 namespace CasseBrique
 {
+    
     internal class MouseService
     {
         public MouseService() 
         {
-            ServicesLocator.Register<MouseService>(this);
+            ServicesLocator.Register(this);
         }
 
         public bool CheckMouseClicks(MouseState oldMouseState, MouseState NewMouseState)

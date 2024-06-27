@@ -31,7 +31,6 @@ namespace CasseBrique
             new GameController();
             _assetsServices=new AssetsService(Content);
             _screenService= new ScreenService(_graphics);
-            new UtilsService();
             new MouseService();
             _scenesManager = new ScenesManager();
             ResourceData.PopulateData();

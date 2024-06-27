@@ -119,18 +119,15 @@ namespace CasseBrique
 
         public void LooseResource(string pResourceType,int pQuantity)
         {
-            var typeOfResource = pResourceType;
-            var amount = pQuantity;
-
             for (int i=ListResources.Count-1;i>=0;i--)
             {
                 var item = ListResources[i];
-                if(item.Type==typeOfResource)
+                if(item.Type== pResourceType)
                 {
                     ListResources.Remove(item);
-                    amount--;
+                    pQuantity--;
                 }
-                if (amount <= 0) break;
+                if (pQuantity <= 0) break;
 
             }
         }
@@ -170,12 +167,14 @@ namespace CasseBrique
             for (int row = 0; row < rows; row++)
                 for (int column = 0; column < columns; column++)
                 {
-                    if (lines[row][column] == '0') bricksLayout[column,row] = 0;
+                    /*if (lines[row][column] == '0') bricksLayout[column,row] = 0;
                     if (lines[row][column] == '1') bricksLayout[column, row] = 1;
                     if (lines[row][column] == '2') bricksLayout[column, row] = 2;
                     if (lines[row][column] == '3') bricksLayout[column, row] = 3;
                     if (lines[row][column] == '4') bricksLayout[column, row] = 4;
-                    if (lines[row][column] == '5') bricksLayout[column, row] = 5;
+                    if (lines[row][column] == '5') bricksLayout[column, row] = 5;*/
+
+                    bricksLayout[column, row] = int.Parse (lines[row][column].ToString());
                     //bricksLayout[column, row] = lines[row][column] =='1' ? 1:0; (rappel: Synthaxe condition ternaire) 
                 }
             return bricksLayout;
